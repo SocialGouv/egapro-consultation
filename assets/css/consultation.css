@@ -1,7 +1,22 @@
-#first-search {
+#search-form {
   margin: 4rem 0;
   justify-content: center;
 }
-#first-search input {
+#search-form input {
   width: 80%;
+  margin-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0;
+}
+#search-form button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+article.entreprise {
+  background-color: #fff;
+  box-shadow: 0 0 3px rgba(50, 50, 50, .3);
+  padding: 1rem;
+  border-radius: .3rem;
 }

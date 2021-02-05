@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr" class="">
+<html lang="fr">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
 <title>À propos de la transmission des indicateurs et du niveau de résultat - Egalité professionnelle - Ministère du Travail</title>
-<link rel="stylesheet" href="/assets/css/egapro.css">
-<link rel="stylesheet" href="/assets/css/consultation.css">
-
+<link rel="stylesheet" href="assets/css/egapro.css">
+<link rel="stylesheet" href="assets/css/consultation.css">
 
 <header>
   <div>
@@ -25,14 +24,53 @@
   <p>Les entreprises de plus de 250 salariés ont l'obligation de transmission aux services du ministre chargé du travail des indicateurs et du niveau de résultat en matière d’écart de rémunération entre les femmes et les hommes prévue à l’article D.1142-5 du code du travail.</p>
 
   <p>
-    Vous pourrez ici consulter l'index d'égalité déclaré par ces entreprises par leur nom ou leur numéro siret.
+    Vous pourrez ici consulter l'index d'égalité déclaré par ces entreprises par leur nom.
   </p>
 
-  <form class="row" id="first-search">
-    <input type="search" name="q" value="" placeholder="Nom ou numéro SIRET de l'entreprise">
+  <form class="row" id="search-form">
+    <input type="search" name="q" value="" placeholder="Nom de l'entreprise">
     <button rel="next">Rechercher</button>
   </form>
 
+  <section id="search-results">
+    <script type="text/html">
+      <h1> <%= total %> Entreprises correspondent à cette recherche</h1>
+      <% records.forEach((record) => { %>
+      <article class=entreprise>
+        <header>
+          <h1><%= record.informationsEntreprise.nomEntreprise %></h1>
+          <p><small>Déclaration <%= record.informations.anneeDeclaration %></small></p>
+        </header>
+        <section>
+          <ul>
+            <li>siren : <%= record.informationsEntreprise.siren %></li>
+            <li>structure : <%= record.informationsEntreprise.structure %></li>
+          </ul>
+          <% if(record.informationsEntreprise.entreprisesUES) { %>
+            <details>
+              <summary>Entreprises UES</summary>
+              <ul>
+                <% record.informationsEntreprise.entreprisesUES.forEach((ues) => { %>
+                <li><%= ues.nom %> (<%= ues.siren %>)</li>
+                <% }) %>
+              </ul>
+            </details>
+          <% } %>
+
+        </section>
+      </article>
+      <% }) %>
+    </script>
+  </section>
+<!--
+  q
+  limit
+  offset
+  code
+  departement
+  region
+  -> results
+-->
 </main>
 
 <footer>
@@ -64,5 +102,23 @@
     <a href="#" onclick="notify.close()" class=close>x</a>
   </div>
 </div>
+
+<script src="assets/js/utils.js"></script>
+<script src="assets/js/ejs.js"></script>
+<script>
+  const config = {
+    apiUrl: 'https://dev.egapro.fabrique.social.gouv.fr/api'
+  }
+  const resultNode = document.querySelector('#search-results')
+  const template = resultNode.querySelector('script').innerHTML
+
+  document.querySelector('#search-form').addEventListener('submit', async (event) => {
+    event.preventDefault()
+    const data = new URLSearchParams(new FormData(event.target))
+    const response = await request('GET', `${config.apiUrl}/search?${data}`)
+    resultNode.innerHTML = ejs.render(template, { records: response.data.data, total: response.data.total })
+    console.debug(response.data.data)
+  })
+</script>
 
 </html>
