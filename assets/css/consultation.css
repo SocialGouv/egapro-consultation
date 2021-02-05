@@ -16,7 +16,11 @@
 
 article.entreprise {
   background-color: #fff;
-  box-shadow: 0 0 3px rgba(50, 50, 50, .3);
+  box-shadow: 0 0 2px rgba(50, 50, 50, .2);
   padding: 1rem;
-  border-radius: .3rem;
+  border-radius: 1rem;
+  margin: .3rem 0;
+}
+article.entreprise h1 {
+  margin: 0 0 1rem 0;
 }

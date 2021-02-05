@@ -46,7 +46,7 @@
             <li>siren : <%= record.informationsEntreprise.siren %></li>
             <li>structure : <%= record.informationsEntreprise.structure %></li>
           </ul>
-          <% if(record.informationsEntreprise.entreprisesUES) { %>
+          <% if(record.informationsEntreprise.entreprisesUES.length) { %>
             <details>
               <summary>Entreprises UES</summary>
               <ul>
