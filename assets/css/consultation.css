@@ -1,3 +1,14 @@
+main {
+  margin-top: 100px; /* height of the header */
+}
+
+page {
+  display: none;
+}
+page[visible] {
+  display: block;
+}
+
 #search-form {
   margin: 4rem 0;
   justify-content: center;

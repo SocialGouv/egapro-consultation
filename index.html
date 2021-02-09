@@ -18,59 +18,55 @@
   </div>
 </header>
 
-<main class=main>
-  <h1>À propos de la consultation des indicateurs et du niveau de résultat</h1>
+<main>
 
-  <p>Les entreprises de plus de 250 salariés ont l'obligation de transmission aux services du ministre chargé du travail des indicateurs et du niveau de résultat en matière d’écart de rémunération entre les femmes et les hommes prévue à l’article D.1142-5 du code du travail.</p>
+  <page name="home">
+    <h1>À propos de la consultation des indicateurs et du niveau de résultat</h1>
 
-  <p>
-    Vous pourrez ici consulter l'index d'égalité déclaré par ces entreprises par leur nom.
-  </p>
+    <p>Les entreprises de plus de 250 salariés ont l'obligation de transmission aux services du ministre chargé du travail des indicateurs et du niveau de résultat en matière d’écart de rémunération entre les femmes et les hommes prévue à l’article D.1142-5 du code du travail.</p>
 
-  <form class="row" id="search-form">
-    <input type="search" name="q" value="" placeholder="Nom de l'entreprise">
-    <button rel="next">Rechercher</button>
-  </form>
+    <p>
+      Vous pourrez ici consulter l'index d'égalité déclaré par ces entreprises par leur nom.
+    </p>
 
-  <section id="search-results">
-    <script type="text/html">
-      <h1> <%= total %> Entreprises correspondent à cette recherche</h1>
-      <% records.forEach((record) => { %>
-      <article class=entreprise>
-        <header>
-          <h1><%= record.informationsEntreprise.nomEntreprise %></h1>
-          <p><small>Déclaration <%= record.informations.anneeDeclaration %></small></p>
-        </header>
-        <section>
-          <ul>
-            <li>siren : <%= record.informationsEntreprise.siren %></li>
-            <li>structure : <%= record.informationsEntreprise.structure %></li>
-          </ul>
-          <% if(record.informationsEntreprise.entreprisesUES.length) { %>
-            <details>
-              <summary>Entreprises UES</summary>
-              <ul>
-                <% record.informationsEntreprise.entreprisesUES.forEach((ues) => { %>
-                <li><%= ues.nom %> (<%= ues.siren %>)</li>
-                <% }) %>
-              </ul>
-            </details>
-          <% } %>
+    <form action="/search" class="row" id="search-form">
+      <input type="search" name="q" value="" placeholder="Nom de l'entreprise">
+      <button rel="next">Rechercher</button>
+    </form>
+  </page>
 
-        </section>
-      </article>
-      <% }) %>
-    </script>
-  </section>
-<!--
-  q
-  limit
-  offset
-  code
-  departement
-  region
-  -> results
--->
+  <page name="search">
+    <h1> <%= total %> Entreprises correspondent à cette recherche</h1>
+    <% data.forEach((record) => { %>
+
+    <article class=entreprise>
+      <header>
+        <h1><%= record.informationsEntreprise.nomEntreprise %></h1>
+        <p><small>Déclaration <%= record.informations.anneeDeclaration %></small></p>
+      </header>
+      <section>
+        <ul>
+          <li>siren : <%= record.informationsEntreprise.siren %></li>
+          <li>structure : <%= record.informationsEntreprise.structure %></li>
+        </ul>
+        <% if(record.informationsEntreprise.entreprisesUES.length) { %>
+          <details>
+            <summary>Entreprises UES</summary>
+            <ul>
+              <% record.informationsEntreprise.entreprisesUES.forEach((ues) => { %>
+              <li><%= ues.nom %> (<%= ues.siren %>)</li>
+              <% }) %>
+            </ul>
+          </details>
+        <% } %>
+      </section>
+    </article>
+    <% }) %>
+  </page>
+
+  <page name="404">
+    La page demandée n'existe pas
+  </page>
 </main>
 
 <footer>
@@ -103,22 +99,64 @@
   </div>
 </div>
 
-<script src="assets/js/utils.js"></script>
+<script src="assets/js/page.js"></script>
 <script src="assets/js/ejs.js"></script>
+<script src="assets/js/utils.js"></script>
 <script>
   const config = {
     apiUrl: 'https://dev.egapro.fabrique.social.gouv.fr/api'
   }
-  const resultNode = document.querySelector('#search-results')
-  const template = resultNode.querySelector('script').innerHTML
 
-  document.querySelector('#search-form').addEventListener('submit', async (event) => {
-    event.preventDefault()
-    const data = new URLSearchParams(new FormData(event.target))
-    const response = await request('GET', `${config.apiUrl}/search?${data}`)
-    resultNode.innerHTML = ejs.render(template, { records: response.data.data, total: response.data.total })
-    console.debug(response.data.data)
+  const templates = Array.from(document.querySelectorAll('page')).reduce((templates, page) => {
+    const name = page.getAttribute('name')
+    templates[name] = page.innerHTML
+    return templates
+  }, {})
+
+  // Enable query params
+  page('*', (req, next) => {
+    req.query = new URLSearchParams(req.path.split('?')[1])
+    next()
   })
+
+  page('/', () => {
+    render('home')
+  })
+
+  page('/search', async (req) => {
+    const response = await request('GET', `${config.apiUrl}/search?${req.query}`)
+    render('search', response.data)
+  })
+
+  page('*', () => {
+    render('404')
+  })
+
+  page({ hashbang: true })
+
+  // Route also form action as hashbang
+  Array.from(document.querySelectorAll('form')).forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault()
+      const queryParams = new URLSearchParams(new FormData(form))
+      const pathname = new URL(form.action).pathname
+      page(`${pathname}?${queryParams}`)
+    })
+  })
+
+  function getTemplate(name) {
+    return templates[name].replaceAll('&lt;', '<').replaceAll('&gt;', '>')
+  }
+
+  function render(name, data) {
+    Array.from(document.querySelectorAll('page')).forEach((page) => {
+      page.removeAttribute('visible')
+    })
+    const page = document.querySelector(`page[name="${name}"]`)
+    page.setAttribute('visible', 'visible')
+    const html = getTemplate(name)
+    page.innerHTML= ejs.render(html, data)
+  }
 </script>
 
 </html>
