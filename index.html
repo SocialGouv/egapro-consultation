@@ -107,13 +107,38 @@
     apiUrl: 'https://dev.egapro.fabrique.social.gouv.fr/api'
   }
 
+
+  ////////////////
+  /* Templating */
+  ////////////////
+
+  // Cache templates
   const templates = Array.from(document.querySelectorAll('page')).reduce((templates, page) => {
     const name = page.getAttribute('name')
     templates[name] = page.innerHTML
     return templates
   }, {})
 
-  // Enable query params
+  function getTemplate(name) {
+    return templates[name].replaceAll('&lt;', '<').replaceAll('&gt;', '>')
+  }
+
+  function render(name, data) {
+    Array.from(document.querySelectorAll('page')).forEach((page) => {
+      page.removeAttribute('visible')
+    })
+    const page = document.querySelector(`page[name="${name}"]`)
+    page.setAttribute('visible', 'visible')
+    const html = getTemplate(name)
+    page.innerHTML= ejs.render(html, data)
+  }
+
+
+  /////////////////
+  /* Controllers */
+  /////////////////
+
+  // Enable query params for router. This must remain before specific routes.
   page('*', (req, next) => {
     req.query = new URLSearchParams(req.path.split('?')[1])
     next()
@@ -143,20 +168,6 @@
       page(`${pathname}?${queryParams}`)
     })
   })
-
-  function getTemplate(name) {
-    return templates[name].replaceAll('&lt;', '<').replaceAll('&gt;', '>')
-  }
-
-  function render(name, data) {
-    Array.from(document.querySelectorAll('page')).forEach((page) => {
-      page.removeAttribute('visible')
-    })
-    const page = document.querySelector(`page[name="${name}"]`)
-    page.setAttribute('visible', 'visible')
-    const html = getTemplate(name)
-    page.innerHTML= ejs.render(html, data)
-  }
 </script>
 
 </html>
