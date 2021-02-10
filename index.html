@@ -36,25 +36,29 @@
   </page>
 
   <page name="search">
-    <h1> <%= total %> Entreprises correspondent à cette recherche</h1>
+    <h1> <%= count %> Entreprises correspondent à cette recherche</h1>
     <% data.forEach((record) => { %>
 
     <article class=entreprise>
       <header>
-        <h1><%= record.informationsEntreprise.nomEntreprise %></h1>
-        <p><small>Déclaration <%= record.informations.anneeDeclaration %></small></p>
+        <h1><%= record.entreprise.raison_sociale %></h1>
+        <p><small>Déclarations :
+          <% Object.entries(record.notes).sort().reverse().forEach((declaration) => { %>
+            <%= declaration[0] %>=<%= declaration[1] %>
+          <% }) %>
+        </small></p>
       </header>
       <section>
         <ul>
-          <li>siren : <%= record.informationsEntreprise.siren %></li>
-          <li>structure : <%= record.informationsEntreprise.structure %></li>
+          <li>siren : <%= record.entreprise.siren %></li>
+          <li>structure : <%= record.entreprise.ues ? "Unité Économique et Sociale" : "entreprise" %></li>
         </ul>
-        <% if(record.informationsEntreprise.entreprisesUES.length) { %>
+        <% if(record.entreprise.ues) { %>
           <details>
-            <summary>Entreprises UES</summary>
+            <summary>Entreprises composant l'UES (<%= record.entreprise.ues.nom %>)</summary>
             <ul>
-              <% record.informationsEntreprise.entreprisesUES.forEach((ues) => { %>
-              <li><%= ues.nom %> (<%= ues.siren %>)</li>
+              <% record.entreprise.ues.entreprises.forEach((ues) => { %>
+              <li><%= ues.raison_sociale%> (<%= ues.siren %>)</li>
               <% }) %>
             </ul>
           </details>
