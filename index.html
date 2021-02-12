@@ -3,37 +3,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
 <title>À propos de la transmission des indicateurs et du niveau de résultat - Egalité professionnelle - Ministère du Travail</title>
-<link rel="stylesheet" href="assets/css/egapro.css">
 <link rel="stylesheet" href="assets/css/consultation.css">
 
 <header>
   <div>
     <a href="https://travail-emploi.gouv.fr/" target="_blank"><img src="assets/img/marianne.svg" alt="Marianne"></a>
+    <img src="assets/img/logo.png" alt="Index Égalité Femme/Homme">
     <hgroup>
-      <h1><a href="https://index-egapro.travail.gouv.fr/" target="_blank">Index Egapro</a></h1>
+      <h1><a href="https://index-egapro.travail.gouv.fr/" target="_blank">Index Égalité Professionnelle</a></h1>
+      <h2>La référence sur l'égalité F/H en entreprise</h2>
     </hgroup>
     <p>
-      L’outil de consultation de votre index égalité professionnelle Femmes&#8209;Hommes
+      <a>Comment l'index est-il calculé ?</a>
     </p>
   </div>
 </header>
 
 <main>
+  <section>
+    <h1>Recherche par entreprise</h1>
+    <page name="home">
+      <form action="/search" class="row" id="search-form">
+        <input type="search" name="q" value="" placeholder="Tapez le nom d'une entreprise">
+        <button rel="next">Rechercher</button>
+      </form>
+    </page>
+  </section>
 
-  <page name="home">
-    <h1>À propos de la consultation des indicateurs et du niveau de résultat</h1>
-
-    <p>Les entreprises de plus de 250 salariés ont l'obligation de transmission aux services du ministre chargé du travail des indicateurs et du niveau de résultat en matière d’écart de rémunération entre les femmes et les hommes prévue à l’article D.1142-5 du code du travail.</p>
-
-    <p>
-      Vous pourrez ici consulter l'index d'égalité déclaré par ces entreprises par leur nom.
-    </p>
-
-    <form action="/search" class="row" id="search-form">
-      <input type="search" name="q" value="" placeholder="Nom de l'entreprise">
-      <button rel="next">Rechercher</button>
+  <section>
+    <form>
+      <select name="effectif">
+        <option value="">Taille de l'entreprise</option>
+        <option value="250">250 à 999 salariés</option>
+        <option value="1000">1000 salariés ou plus</option>
+      </select>
     </form>
-  </page>
+  </section>
 
   <page name="search">
     <h1> <%= data.length %> Entreprises correspondent à cette recherche</h1>

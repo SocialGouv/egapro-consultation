@@ -1,6 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Cabin&display=swap");
+
+  /* ****** */
+ /* RESET */
+/* **** */
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: calc(100vh - 120px);
+}
+
+  /* ****** */
+ /* LAYOUT */
+/* ****** */
+
+body {
+  background: linear-gradient(#eff0fa,#fff);
+  color: #444;
+  font-family: "Cabin",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+header img {
+  width: 90px;
+}
+
+body > header {
+  position: fixed;
+  display: flex;
+  padding: 2rem 0;
+  background: #fff;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+body > header > div {
+  margin: auto;
+  width: inherit;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+body > header h1 {
+  font-size: 1.3rem;
+  margin: .1rem 0;
+}
+body > header h2 {
+  font-size: 1.1rem;
+  font-weight: normal;
+}
+body > header a {
+  text-decoration: none;
+  color: inherit;
+}
+body > header p a {
+  text-decoration: underline;
+}
+
+
 main {
   margin-top: 100px; /* height of the header */
 }
+
+body > footer {
+  border-top: #eee solid 1px;
+  font-size: .88rem;
+  display: flex;
+  /* margin-top: 1rem; */
+  padding: 1rem 0 .5rem 0;
+}
+body > footer header span {
+  display: block;
+  margin-top: .5rem;
+}
+body > footer a {
+  color: inherit;
+  font-size: .9em;
+}
+body > footer nav {
+  width: 100%;
+  margin: 0 1rem 0 1rem;
+}
+body > footer nav a {
+  display: block;
+  margin-bottom: .3rem;
+}
+body > footer p {
+  margin: 0;
+}
+
+
+  /* **************** */
+ /* Specific content */
+/* **************** */
 
 page {
   display: none;
