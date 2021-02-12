@@ -19,11 +19,16 @@ body {
 /* ****** */
 
 body {
-  background: linear-gradient(#eff0fa,#fff);
   color: #444;
   font-family: "Cabin",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
-  max-width: 800px;
   margin: 0 auto;
+}
+
+h1 {
+  font-size: 1.3rem;
+}
+h2 {
+  font-size: 1.1rem;
 }
 
 header img {
@@ -50,11 +55,9 @@ body > header > div {
 }
 
 body > header h1 {
-  font-size: 1.3rem;
   margin: .1rem 0;
 }
 body > header h2 {
-  font-size: 1.1rem;
   font-weight: normal;
 }
 body > header a {
@@ -67,7 +70,67 @@ body > header p a {
 
 
 main {
-  margin-top: 100px; /* height of the header */
+  margin-top: 150px; /* height of the header */
+  background: linear-gradient(#eff0fa,#fff);
+}
+
+
+main > article {
+  text-align: center;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+}
+
+main blockquote {
+  font-weight: bolder;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  color: black;
+  padding: 1rem;
+}
+
+main h1,
+main h2 {
+  color: black;
+}
+
+form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+input {
+  border: 1px solid #777;
+  border-radius: 5rem;
+  padding: 1rem;
+  font: inherit;
+}
+
+#search {
+
+}
+
+#search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#search-form input {
+  width: 80%;
+  margin-right: 0;
+  border-right: 0;
+}
+#search-form button {
+  width: 45px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  margin-left: -50px;
+}
+#search-form button img {
+  width: 100%;
+  height: 100%;
 }
 
 body > footer {
@@ -107,22 +170,6 @@ page {
 }
 page[visible] {
   display: block;
-}
-
-#search-form {
-  margin: 4rem 0;
-  justify-content: center;
-}
-#search-form input {
-  width: 80%;
-  margin-right: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: 0;
-}
-#search-form button {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
 }
 
 article.entreprise {

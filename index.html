@@ -33,17 +33,23 @@
 </header>
 
 <main>
-  <section>
+  <article>
+    <blockquote>
+      L'index d'égalité Femmes-Hommes dans les entreprises de plus de 250 salarié•e•s
+    </blockquote>
+  </article>
+
+  <article id=search>
     <h1>Recherche par entreprise</h1>
     <page name="home">
       <form action="/search" class="row" id="search-form">
         <input type="search" name="q" value="" placeholder="Tapez le nom d'une entreprise">
-        <button rel="next">Rechercher</button>
+        <button rel="next"><img src="https://cdn3.iconfinder.com/data/icons/apply/32/apply_21-512.png" alt="Rechercher"></button>
       </form>
     </page>
-  </section>
+  </article>
 
-  <section>
+  <!-- <section>
     <form>
       <select name="effectif">
         <option value="">Taille de l'entreprise</option>
@@ -51,7 +57,7 @@
         <option value="1000">1000 salariés ou plus</option>
       </select>
     </form>
-  </section>
+  </section> -->
 
   <page name="search">
     <h1> <%= data.length %> Entreprises correspondent à cette recherche</h1>
