@@ -22,6 +22,8 @@ body {
   color: #444;
   font-family: "Cabin",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
   margin: 0 auto;
+  line-height: 1.6;
+  font-size: 18px;
 }
 
 h1 {
@@ -135,26 +137,42 @@ input {
 
 body > footer {
   border-top: #eee solid 1px;
-  font-size: .88rem;
-  display: flex;
-  /* margin-top: 1rem; */
-  padding: 1rem 0 .5rem 0;
+  margin-top: 2rem;
+  background-color: #676767;
 }
-body > footer header span {
-  display: block;
-  margin-top: .5rem;
+body > footer > .wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #fff;
+}
+body > footer section {
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 0;
+}
+body > footer section > p {
+  max-width: 40rem;
 }
 body > footer a {
   color: inherit;
-  font-size: .9em;
 }
 body > footer nav {
+  display: block;
+  border-top: 1px solid #fff;
   width: 100%;
   margin: 0 1rem 0 1rem;
+  padding: 1rem 0;
 }
 body > footer nav a {
-  display: block;
-  margin-bottom: .3rem;
+  display: inline-block;
+  font-size: .8rem;
+  text-decoration: none;
+  padding-right: 1rem;
+  margin-right: 1rem;
+  border-right: 1px solid #aaa;
+}
+body > footer nav a:last-of-type {
+  border-right: none;
 }
 body > footer p {
   margin: 0;
