@@ -28,6 +28,11 @@ body {
   font-size: .9rem;
 }
 
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
 
   /* ****** */
  /* LAYOUT */
@@ -65,10 +70,9 @@ body > header {
 body > header > div {
   margin: auto;
   width: inherit;
-  max-width: 1200px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 body > header h1 {
@@ -151,8 +155,7 @@ body > footer {
   margin-top: 2rem;
   background-color: #676767;
 }
-body > footer > .wrapper {
-  max-width: 1200px;
+body > footer > div {
   margin: 0 auto;
   color: #fff;
 }
@@ -205,13 +208,43 @@ page[name=home] {
   text-align: center;
 }
 
-article.entreprise {
-  background-color: #fff;
-  box-shadow: 0 0 2px rgba(50, 50, 50, .2);
-  padding: 1rem;
-  border-radius: 1rem;
-  margin: .3rem 0;
+page[name=search] {
+  background: #fff;
 }
-article.entreprise h1 {
-  margin: 0 0 1rem 0;
+page[name=search] {
+  padding-top: 3rem;
+}
+page[name=search] .result {
+  display: flex;
+  color: #000;
+}
+page[name=search] .result header {
+  min-width: 20rem;
+}
+page[name=search] .result h1,
+page[name=search] .result h3 {
+  text-transform: uppercase;
+  margin: 0 0 .2rem 0;
+}
+page[name=search] .result p {
+  margin: 0 0 .3rem 0;
+}
+page[name=search] .result > * {
+  border-right: 1px solid #777;
+  padding: 0 2rem;
+  margin: 2rem 0;
+}
+page[name=search] .result > section {
+  text-transform: uppercase;
+}
+page[name=search] .result > *:first-child {
+  padding-left: 0;
+}
+page[name=search] .result > *:last-child {
+  border-right: none;
+}
+page[name=search] .department {
+  font-weight: lighter;
+  color: #555;
+  font-size: .9rem;
 }

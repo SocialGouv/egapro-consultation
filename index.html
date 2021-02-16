@@ -19,7 +19,7 @@
 </script>
 
 <header>
-  <div>
+  <div class=content-wrapper>
     <a href="https://travail-emploi.gouv.fr/" target="_blank"><img src="assets/img/marianne.svg" alt="Marianne"></a>
     <img src="assets/img/logo.png" alt="Index Égalité Femme/Homme">
     <hgroup>
@@ -57,36 +57,41 @@
   </page>
 
   <page name="search">
-    <h1> <%= data.length %> Entreprises correspondent à cette recherche</h1>
-    <% data.forEach((record) => { %>
+    <div class="content-wrapper">
+      <h1><%= data.length %> résultat<% if(data.length > 1) { %>s<% } %></h1>
+      <% data.forEach((record) => { %>
 
-    <article class=entreprise>
-      <header>
-        <h1><%= record.entreprise.raison_sociale %></h1>
-        <p><small>Déclarations :
+      <article class=result>
+        <header>
+          <h1><%= record.entreprise.raison_sociale %></h1>
+          <p>SIREN : <%= record.entreprise.siren %></p>
+          <p class=department>Département <%= record.entreprise.département %></p>
+        </header>
+        <section>
+          <h3><%= record.entreprise.effectif.tranche.replace (':', ' à ') %></h3>
+          <p>salarié•e•s</p>
+        </section>
+        <section>
           <% Object.entries(record.notes).sort().reverse().forEach((declaration) => { %>
-            <%= declaration[0] %>=<%= declaration[1] %>
+          <h3><%= declaration[1] %></h3>
+          <p>En <%= declaration[0] %></p>
           <% }) %>
-        </small></p>
-      </header>
-      <section>
-        <ul>
-          <li>siren : <%= record.entreprise.siren %></li>
-          <li>structure : <%= record.entreprise.ues ? "Unité Économique et Sociale" : "entreprise" %></li>
-        </ul>
-        <% if(record.entreprise.ues) { %>
-          <details>
-            <summary>Entreprises composant l'UES (<%= record.entreprise.ues.nom %>)</summary>
-            <ul>
-              <% record.entreprise.ues.entreprises.forEach((ues) => { %>
-              <li><%= ues.raison_sociale%> (<%= ues.siren %>)</li>
-              <% }) %>
-            </ul>
-          </details>
-        <% } %>
-      </section>
-    </article>
-    <% }) %>
+        </section>
+        <!-- <footer>
+          <% if(record.entreprise.ues) { %>
+            <details>
+              <summary>Entreprises composant l'UES (<%= record.entreprise.ues.nom %>)</summary>
+              <ul>
+                <% record.entreprise.ues.entreprises.forEach((ues) => { %>
+                <li><%= ues.raison_sociale%> (<%= ues.siren %>)</li>
+                <% }) %>
+              </ul>
+            </details>
+          <% } %>
+        </footer> -->
+      </article>
+      <% }) %>
+    </div>
   </page>
 
   <page name="404">
@@ -95,7 +100,7 @@
 </main>
 
 <footer>
-  <div class="wrapper">
+  <div class="content-wrapper">
     <section>
       <header>
         <a href="https://travail-emploi.gouv.fr/" target="_blank">
