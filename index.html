@@ -51,7 +51,7 @@
     <p>
       Vous souhaitez consulter les données de toutes les entreprises ?
       <br>
-      Téléchargez recensant toutes les déclarations actuelles au format tableur (.csv) :
+      Téléchargez le fichier recensant toutes les déclarations <span id="csv-date"><% if (state.csv_update) { %>au <%= state.csv_update %><% } else { %>actuelles<% } %><span> au format tableur (.csv) :
     </p>
     <a class="button" href="/index-egalite-fh.csv" download>⤓ Télécharger</a>
   </page>
@@ -132,6 +132,20 @@
     apiUrl: 'https://dev.egapro.fabrique.social.gouv.fr/api'
   }
 
+  ////////////////
+  /* State      */
+  ////////////////
+
+  const state = {
+    csv_update: undefined
+  }
+
+  async function init() {
+    const response = await request('head', "/index-egalite-fh.csv")
+    if (!response.ok) return
+    const lastModified = new Date(response.headers.get('last-modified'))
+    state.csv_update = lastModified.toLocaleDateString()
+  }
 
   ////////////////
   /* Templating */
@@ -148,14 +162,16 @@
     return templates[name].replaceAll('&lt;', '<').replaceAll('&gt;', '>')
   }
 
-  function render(name, data) {
+  async function render(name, data) {
+    const state = await init()
+    const withState = {...state, ...data}
     Array.from(document.querySelectorAll('page')).forEach((page) => {
       page.removeAttribute('visible')
     })
     const page = document.querySelector(`page[name="${name}"]`)
     page.setAttribute('visible', 'visible')
     const html = getTemplate(name)
-    page.innerHTML= ejs.render(html, data)
+    page.innerHTML= ejs.render(html, withState)
   }
 
 
