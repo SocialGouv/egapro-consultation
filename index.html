@@ -23,7 +23,9 @@
     <a href="https://travail-emploi.gouv.fr/" target="_blank">
       <img src="assets/img/marianne-header.png" alt="Ministère du travail, de l'emploi et de l'insertion. Liberté, égalité, fraternité">
     </a>
-    <img src="assets/img/logo.png" alt="Index Égalité Femme/Homme">
+    <a href="/">
+      <img src="assets/img/logo.png" alt="Index Égalité Femme/Homme">
+    </a>
     <hgroup>
       <h1><a href="https://index-egapro.travail.gouv.fr/" target="_blank">Index Égalité Professionnelle</a></h1>
       <h2>La référence sur l'égalité F/H en entreprise</h2>
@@ -37,7 +39,7 @@
 <main>
   <article>
     <blockquote>
-      L'index d'égalité Femmes-Hommes dans les entreprises de plus de 250 salarié•e•s
+      L'index d'égalité Femmes-Hommes dans les entreprises de plus de 250 salariés
     </blockquote>
   </article>
 
@@ -70,8 +72,14 @@
           <p class=department>Département <%= record.entreprise.département %></p>
         </header>
         <section>
-          <h3><%= record.entreprise.effectif.tranche.replace (':', ' à ') %></h3>
-          <p>salarié•e•s</p>
+          <h3>
+            <% if(record.entreprise.effectif.tranche.includes('1000')) { %>
+              Plus de 1000
+          <% } else { %>
+              251 à 1000
+          <% } %>
+          </h3>
+          <p>salariés</p>
         </section>
         <% Object.entries(record.notes).sort().reverse().forEach((declaration) => { %>
           <section>
@@ -79,18 +87,6 @@
             <p>En <%= declaration[0] %></p>
           </section>
         <% }) %>
-        <!-- <footer>
-          <% if(record.entreprise.ues) { %>
-            <details>
-              <summary>Entreprises composant l'UES (<%= record.entreprise.ues.nom %>)</summary>
-              <ul>
-                <% record.entreprise.ues.entreprises.forEach((ues) => { %>
-                <li><%= ues.raison_sociale%> (<%= ues.siren %>)</li>
-                <% }) %>
-              </ul>
-            </details>
-          <% } %>
-        </footer> -->
       </article>
       <% }) %>
     </div>
@@ -111,22 +107,14 @@
       </header>
       <aside>
         <p>
-          Porté par la loi « Pour la liberté de choisir son avenir professionel » du 5 septembre 2018, l'Index d'égalité professionnelle a été concçu pour faire progresser au sein des entreprises l'égalité salariale entre les femmes et les hommes
-        </p>
-        <p>
-          <a href="https://voxusagers.numerique.gouv.fr/Demarches/2240?&amp;view-mode=formulaire-avis&amp;nd_mode=en-ligne-enti%C3%A8rement&amp;nd_source=button&amp;key=73366ddb13d498f4c77d01c2983bab48" target="_blank" rel="noopener noreferrer">donnez-nous votre avis</a> ou <a href="https://github.com/SocialGouv/egapro-consultation/tree/{{ site.version }}" target="_blank" rel="noopener noreferrer">contribuez sur Github</a>
+          Porté par la loi « Pour la liberté de choisir son avenir professionel » du 5 septembre 2018, l'Index d'égalité professionnelle a été conçu pour faire progresser au sein des entreprises l'égalité salariale entre les femmes et les hommes.
         </p>
       </aside>
     </section>
-    <!-- <nav>
-      <a href="https://travail-emploi.gouv.fr/droit-du-travail/egalite-professionnelle-discrimination-et-harcelement/indexegapro"
-        target="_blank" rel="noopener noreferrer">retrouvez le simulateur au format Excel</a>
-      <a href="https://index-egapro.travail.gouv.fr/mentions-legales">mentions légales</a>
-      <a href="https://index-egapro.travail.gouv.fr/cgu">conditions
-        générales d'utilisation</a>
-      <a href="https://index-egapro.travail.gouv.fr/politique-confidentialite">politique de
-        confidentialité</a>
-    </nav> -->
+    <nav>
+      <a href="https://voxusagers.numerique.gouv.fr/Demarches/2240?&amp;view-mode=formulaire-avis&amp;nd_mode=en-ligne-enti%C3%A8rement&amp;nd_source=button&amp;key=73366ddb13d498f4c77d01c2983bab48" target="_blank" rel="noopener noreferrer">donnez-nous votre avis</a>
+      <a href="https://github.com/SocialGouv/egapro-consultation/tree/{{ site.version }}" target="_blank" rel="noopener noreferrer">contribuez sur Github</a>
+    </nav>
   </div>
 </footer>
 

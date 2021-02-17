@@ -59,20 +59,23 @@ body > header img {
 
 body > header {
   position: fixed;
-  display: flex;
   padding: 2rem 0;
   background: #fff;
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 3;
 }
 body > header > div {
   margin: auto;
   width: inherit;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+}
+body > header > div > * {
+  width: 33%;
+}
+body > header > div > :nth-child(2) {
+  text-align: center;
 }
 
 body > header h1 {
@@ -174,7 +177,7 @@ body > footer nav {
   display: block;
   border-top: 1px solid #fff;
   width: 100%;
-  margin: 0 1rem 0 1rem;
+  padding: .5rem 1rem;
 }
 body > footer nav a {
   display: inline-block;
@@ -183,6 +186,9 @@ body > footer nav a {
   padding-right: 1rem;
   margin-right: 1rem;
   border-right: 1px solid #aaa;
+}
+body > footer nav a:hover {
+  text-decoration: underline;
 }
 body > footer nav a:last-of-type {
   border-right: none;
@@ -238,6 +244,9 @@ page[name=search] .result > section {
 }
 page[name=search] .result > *:first-child {
   padding-left: 0;
+}
+page[name=search] .result > section:first-of-type {
+  width: 15%;
 }
 page[name=search] .result > *:last-child {
   border-right: none;
