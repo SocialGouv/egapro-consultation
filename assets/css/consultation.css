@@ -53,8 +53,8 @@ h2 {
   font-size: 1.1rem;
 }
 
-header img {
-  width: 90px;
+body > header img {
+  max-height: 5rem;
 }
 
 body > header {
@@ -153,18 +153,18 @@ input {
 body > footer {
   border-top: #eee solid 1px;
   margin-top: 2rem;
-  background-color: #676767;
-}
-body > footer > div {
-  margin: 0 auto;
+  background-color: #6a6a6a;
   color: #fff;
+}
+body > footer header img {
+  max-height: 6rem;
 }
 body > footer section {
   display: flex;
   justify-content: space-between;
-  margin: 2rem 0;
+  padding: 2rem 0;
 }
-body > footer section > p {
+body > footer section p {
   max-width: 40rem;
 }
 body > footer a {
@@ -175,7 +175,6 @@ body > footer nav {
   border-top: 1px solid #fff;
   width: 100%;
   margin: 0 1rem 0 1rem;
-  padding: 1rem 0;
 }
 body > footer nav a {
   display: inline-block;
@@ -219,7 +218,7 @@ page[name=search] .result {
   color: #000;
 }
 page[name=search] .result header {
-  min-width: 20rem;
+  width: 30%;
 }
 page[name=search] .result h1,
 page[name=search] .result h3 {
