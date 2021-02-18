@@ -78,6 +78,9 @@ body > header > div > :nth-child(2) {
   text-align: center;
 }
 
+body > header hgroup {
+  text-align: right;
+}
 body > header h1 {
   margin: .1rem 0;
 }
