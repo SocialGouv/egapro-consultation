@@ -163,15 +163,16 @@ body > footer {
   color: #fff;
 }
 body > footer header img {
-  max-height: 6rem;
+  max-height: 5rem;
 }
 body > footer section {
   display: flex;
   justify-content: space-between;
-  padding: 2rem 0;
+  padding: 2rem 0 1rem 0;
 }
 body > footer section p {
   max-width: 40rem;
+  font-size: 1rem;
 }
 body > footer a {
   color: inherit;
