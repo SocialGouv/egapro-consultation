@@ -1,6 +1,210 @@
-main {
-  margin-top: 100px; /* height of the header */
+@import url("https://fonts.googleapis.com/css2?family=Cabin&display=swap");
+
+  /* ****** */
+ /* RESET */
+/* **** */
+
+* {
+  box-sizing: border-box;
 }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: calc(100vh - 120px);
+}
+
+  /* ********** */
+ /* COMPONENTS */
+/* ********** */
+
+.button {
+  display: inline-block;
+  padding: .5rem 2rem;
+  border-radius: 2rem;
+  border: 1px solid rgb(150, 125, 225);
+  color: rgb(150, 125, 225);
+  text-decoration: none;
+  font-size: .9rem;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+  /* ****** */
+ /* LAYOUT */
+/* ****** */
+
+body {
+  color: #444;
+  font-family: "Cabin",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-size: 18px;
+}
+
+h1 {
+  font-size: 1.3rem;
+}
+h2 {
+  font-size: 1.1rem;
+}
+
+body > header img {
+  max-height: 5rem;
+}
+
+body > header {
+  position: fixed;
+  padding: 2rem 0;
+  background: #fff;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+body > header > div {
+  margin: auto;
+  width: inherit;
+  display: flex;
+  align-items: center;
+}
+body > header > div > * {
+  width: 33%;
+}
+body > header > div > :nth-child(2) {
+  text-align: center;
+}
+
+body > header hgroup {
+  text-align: right;
+}
+body > header h1 {
+  margin: .1rem 0;
+}
+body > header h2 {
+  font-weight: normal;
+}
+body > header a {
+  text-decoration: none;
+  color: inherit;
+}
+body > header p a {
+  text-decoration: underline;
+}
+
+
+main {
+  margin-top: 150px; /* height of the header */
+  background: linear-gradient(#eff0fa,#fff);
+}
+
+
+main > article {
+  text-align: center;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+}
+
+main blockquote {
+  font-weight: bolder;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  color: black;
+  padding: 1rem;
+}
+
+main h1,
+main h2 {
+  color: black;
+}
+
+form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+input {
+  border: 1px solid #777;
+  border-radius: 5rem;
+  padding: 1rem;
+  font: inherit;
+}
+
+#search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#search-form input {
+  width: 80%;
+  margin-right: 0;
+  border-right: 0;
+}
+#search-form button {
+  width: 45px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  margin-left: -50px;
+}
+#search-form button img {
+  width: 100%;
+  height: 100%;
+}
+
+body > footer {
+  border-top: #eee solid 1px;
+  margin-top: 2rem;
+  background-color: #6a6a6a;
+  color: #fff;
+}
+body > footer header img {
+  max-height: 5rem;
+}
+body > footer section {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 0 1rem 0;
+}
+body > footer section p {
+  max-width: 40rem;
+  font-size: 1rem;
+}
+body > footer a {
+  color: inherit;
+}
+body > footer nav {
+  display: block;
+  border-top: 1px solid #fff;
+  width: 100%;
+  padding: .5rem 1rem;
+}
+body > footer nav a {
+  display: inline-block;
+  font-size: .8rem;
+  text-decoration: none;
+  padding-right: 1rem;
+  margin-right: 1rem;
+  border-right: 1px solid #aaa;
+}
+body > footer nav a:hover {
+  text-decoration: underline;
+}
+body > footer nav a:last-of-type {
+  border-right: none;
+}
+body > footer p {
+  margin: 0;
+}
+
+
+  /* **************** */
+ /* Specific content */
+/* **************** */
 
 page {
   display: none;
@@ -9,29 +213,50 @@ page[visible] {
   display: block;
 }
 
-#search-form {
-  margin: 4rem 0;
-  justify-content: center;
-}
-#search-form input {
-  width: 80%;
-  margin-right: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: 0;
-}
-#search-form button {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+page[name=home] {
+  text-align: center;
 }
 
-article.entreprise {
-  background-color: #fff;
-  box-shadow: 0 0 2px rgba(50, 50, 50, .2);
-  padding: 1rem;
-  border-radius: 1rem;
-  margin: .3rem 0;
+page[name=search] {
+  background: #fff;
 }
-article.entreprise h1 {
-  margin: 0 0 1rem 0;
+page[name=search] {
+  padding-top: 3rem;
+}
+page[name=search] .result {
+  display: flex;
+  color: #000;
+}
+page[name=search] .result header {
+  width: 30%;
+}
+page[name=search] .result h1,
+page[name=search] .result h3 {
+  text-transform: uppercase;
+  margin: 0 0 .2rem 0;
+}
+page[name=search] .result p {
+  margin: 0 0 .3rem 0;
+}
+page[name=search] .result > * {
+  border-right: 1px solid #777;
+  padding: 0 2rem;
+  margin: 2rem 0;
+}
+page[name=search] .result > section {
+  text-transform: uppercase;
+}
+page[name=search] .result > *:first-child {
+  padding-left: 0;
+}
+page[name=search] .result > section:first-of-type {
+  width: 15%;
+}
+page[name=search] .result > *:last-child {
+  border-right: none;
+}
+page[name=search] .department {
+  font-weight: lighter;
+  color: #555;
+  font-size: .9rem;
 }

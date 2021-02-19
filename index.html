@@ -2,70 +2,93 @@
 <html lang="fr">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
-<title>À propos de la transmission des indicateurs et du niveau de résultat - Egalité professionnelle - Ministère du Travail</title>
-<link rel="stylesheet" href="assets/css/egapro.css">
+<title>L'index d'égalité dans les entreprises - Ministère du Travail</title>
 <link rel="stylesheet" href="assets/css/consultation.css">
+<script
+  src="assets/js/sentry.min.js"
+  integrity="sha384-ir4+BihBClNpjZk3UKgHTr0cwRhujAjy/M5VEGvcOzjhM1Db79GAg9xLxYn4uVK4"
+  crossorigin="anonymous"
+></script>
+<script>
+  if (typeof Sentry !== "undefined") {
+    Sentry.init({
+      dsn: 'https://c98522783c284ae1ada779bc05a57a96@sentry.fabrique.social.gouv.fr/51',
+      release: '2021.02.19'
+    })
+  }
+</script>
 
 <header>
-  <div>
-    <a href="https://travail-emploi.gouv.fr/" target="_blank"><img src="assets/img/marianne.svg" alt="Marianne"></a>
+  <div class=content-wrapper>
+    <a href="https://travail-emploi.gouv.fr/" target="_blank">
+      <img src="assets/img/marianne-header.png" alt="Ministère du travail, de l'emploi et de l'insertion. Liberté, égalité, fraternité">
+    </a>
+    <a href="/">
+      <img src="assets/img/logo.png" alt="Index Égalité Femme/Homme">
+    </a>
     <hgroup>
-      <h1><a href="https://index-egapro.travail.gouv.fr/" target="_blank">Index Egapro</a></h1>
+      <h1><a href="#">Index Égalité Professionnelle</a></h1>
     </hgroup>
-    <p>
-      L’outil de consultation de votre index égalité professionnelle Femmes&#8209;Hommes
+    <p hidden>
+      <a>Comment l'index est-il calculé ?</a>
     </p>
   </div>
 </header>
 
 <main>
+  <article>
+    <blockquote>
+      L'index égalité professionnelle F/H publié par les entreprises de plus de 250 salarié(e)s
+    </blockquote>
+  </article>
+
+  <article id=search>
+    <h1>Rechercher par raison sociale</h1>
+    <form action="/search" class="row" id="search-form">
+      <input type="search" name="q" value="" placeholder="Tapez le nom d'une entreprise">
+      <button rel="next"><img src="https://cdn3.iconfinder.com/data/icons/apply/32/apply_21-512.png" alt="Rechercher"></button>
+    </form>
+  </article>
 
   <page name="home">
-    <h1>À propos de la consultation des indicateurs et du niveau de résultat</h1>
-
-    <p>Les entreprises de plus de 250 salariés ont l'obligation de transmission aux services du ministre chargé du travail des indicateurs et du niveau de résultat en matière d’écart de rémunération entre les femmes et les hommes prévue à l’article D.1142-5 du code du travail.</p>
-
     <p>
-      Vous pourrez ici consulter l'index d'égalité déclaré par ces entreprises par leur nom.
+      Vous souhaitez consulter les données de toutes les entreprises ?
+      <br>
+      Téléchargez le fichier recensant toutes les déclarations <span id="csv-date"><% if (state.csv_update) { %>au <%= state.csv_update %><% } else { %>actuelles<% } %><span> au format tableur (.csv) :
     </p>
-
-    <form action="/search" class="row" id="search-form">
-      <input type="search" name="q" value="" placeholder="Nom de l'entreprise">
-      <button rel="next">Rechercher</button>
-    </form>
+    <a class="button" href="/index-egalite-fh.csv" download>⤓ Télécharger</a>
   </page>
 
   <page name="search">
-    <h1> <%= data.length %> Entreprises correspondent à cette recherche</h1>
-    <% data.forEach((record) => { %>
+    <div class="content-wrapper">
+      <h1><%= data.length %> résultat<% if(data.length > 1) { %>s<% } %></h1>
+      <% data.forEach((record) => { %>
 
-    <article class=entreprise>
-      <header>
-        <h1><%= record.entreprise.raison_sociale %></h1>
-        <p><small>Déclarations :
-          <% Object.entries(record.notes).sort().reverse().forEach((declaration) => { %>
-            <%= declaration[0] %>=<%= declaration[1] %>
-          <% }) %>
-        </small></p>
-      </header>
-      <section>
-        <ul>
-          <li>siren : <%= record.entreprise.siren %></li>
-          <li>structure : <%= record.entreprise.ues ? "Unité Économique et Sociale" : "entreprise" %></li>
-        </ul>
-        <% if(record.entreprise.ues) { %>
-          <details>
-            <summary>Entreprises composant l'UES (<%= record.entreprise.ues.nom %>)</summary>
-            <ul>
-              <% record.entreprise.ues.entreprises.forEach((ues) => { %>
-              <li><%= ues.raison_sociale%> (<%= ues.siren %>)</li>
-              <% }) %>
-            </ul>
-          </details>
-        <% } %>
-      </section>
-    </article>
-    <% }) %>
+      <article class=result>
+        <header>
+          <h1><%= record.entreprise.raison_sociale %></h1>
+          <p>SIREN : <%= record.entreprise.siren %></p>
+          <p class=department>Département <%= record.entreprise.département %></p>
+        </header>
+        <section>
+          <h3>
+            <% if(record.entreprise.effectif.tranche.includes('1000')) { %>
+              Plus de 1000
+          <% } else { %>
+              251 à 1000
+          <% } %>
+          </h3>
+          <p>salariés</p>
+        </section>
+        <% Object.entries(record.notes).sort().reverse().forEach((declaration) => { %>
+          <section>
+            <h3><%= declaration[1] %></h3>
+            <p>En <%= declaration[0] %></p>
+          </section>
+        <% }) %>
+      </article>
+      <% }) %>
+    </div>
   </page>
 
   <page name="404">
@@ -74,34 +97,26 @@
 </main>
 
 <footer>
-  <header>
-    <a href="https://travail-emploi.gouv.fr/" target="_blank">
-      <img src="assets/img/marianne.svg" alt="Marianne">
-    </a>
-  </header>
-  <nav>
-    <a href="https://travail-emploi.gouv.fr/droit-du-travail/egalite-professionnelle-discrimination-et-harcelement/indexegapro"
-      target="_blank" rel="noopener noreferrer">retrouvez le simulateur au format Excel</a>
-    <a href="https://index-egapro.travail.gouv.fr/mentions-legales">mentions légales</a>
-    <a href="https://index-egapro.travail.gouv.fr/cgu">conditions
-      générales d'utilisation</a>
-    <a href="https://index-egapro.travail.gouv.fr/politique-confidentialite">politique de
-      confidentialité</a>
-  </nav>
-  <footer>
-    <p>
-      Index Egapro a été développé par les équipes de la fabrique numérique des ministères sociaux. Pour nous aider à l'améliorer
-      <a href="https://voxusagers.numerique.gouv.fr/Demarches/2240?&amp;view-mode=formulaire-avis&amp;nd_mode=en-ligne-enti%C3%A8rement&amp;nd_source=button&amp;key=73366ddb13d498f4c77d01c2983bab48" target="_blank" rel="noopener noreferrer">donnez-nous votre avis</a> ou <a href="https://github.com/SocialGouv/egapro-consultation/tree/2021.02.11" target="_blank" rel="noopener noreferrer">contribuez sur Github</a>
-    </p>
-  </footer>
-</footer>
-
-<div id="toast">
-  <div class=content>
-    <span class=message></span>
-    <a href="#" onclick="notify.close()" class=close>x</a>
+  <div class="content-wrapper">
+    <section>
+      <header>
+        <a href="https://travail-emploi.gouv.fr/" target="_blank">
+          <img src="assets/img/marianne-footer.png" alt="Ministère du travail, de l'emploi et de l'insertion. Liberté, égalité, fraternité">
+        </a>
+      </header>
+      <aside>
+        <p>
+          Porté par la loi « Pour la liberté de choisir son avenir professionel » du 5 septembre 2018, l'Index d'égalité professionnelle a été conçu pour faire progresser au sein des entreprises l'égalité salariale entre les femmes et les hommes.
+        </p>
+      </aside>
+    </section>
+    <nav>
+      <a href="https://voxusagers.numerique.gouv.fr/Demarches/2240?&amp;view-mode=formulaire-avis&amp;nd_mode=en-ligne-enti%C3%A8rement&amp;nd_source=button&amp;key=73366ddb13d498f4c77d01c2983bab48" target="_blank" rel="noopener noreferrer">donnez-nous votre avis</a>
+      <a href="https://github.com/SocialGouv/egapro-consultation/tree/2021.02.19" target="_blank" rel="noopener noreferrer">contribuez sur Github</a>
+      <a href="mailto:index@travail.gouv.fr?subject=À propos du site de consultation">Contact</a>
+    </nav>
   </div>
-</div>
+</footer>
 
 <script src="assets/js/page.js"></script>
 <script src="assets/js/ejs.js"></script>
@@ -111,6 +126,20 @@
     apiUrl: 'https://dev.egapro.fabrique.social.gouv.fr/api'
   }
 
+  ////////////////
+  /* State      */
+  ////////////////
+
+  const state = {
+    csv_update: undefined
+  }
+
+  async function init() {
+    const response = await request('head', "/index-egalite-fh.csv")
+    if (!response.ok) return
+    const lastModified = new Date(response.headers.get('last-modified'))
+    state.csv_update = lastModified.toLocaleDateString()
+  }
 
   ////////////////
   /* Templating */
@@ -127,14 +156,16 @@
     return templates[name].replaceAll('&lt;', '<').replaceAll('&gt;', '>')
   }
 
-  function render(name, data) {
+  async function render(name, data) {
+    const state = await init()
+    const withState = {...state, ...data}
     Array.from(document.querySelectorAll('page')).forEach((page) => {
       page.removeAttribute('visible')
     })
     const page = document.querySelector(`page[name="${name}"]`)
     page.setAttribute('visible', 'visible')
     const html = getTemplate(name)
-    page.innerHTML= ejs.render(html, data)
+    page.innerHTML= ejs.render(html, withState)
   }
 
 
