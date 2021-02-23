@@ -55,7 +55,7 @@
       <p>
         <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
       </p>
-      <a class="button primary" href="/search">Voir la liste</a>
+      <!-- <a class="button primary" href="/search">Voir la liste</a> -->
     </article>
 
     <article id="download">
@@ -109,7 +109,7 @@
         <% }) %>
         <% if(record.entreprise.ues) { %>
           <details>
-            <summary><%= record.entreprise.ues.nom %></summary>
+            <summary>Voir les entreprises composannt l'UES ></summary>
             <ol>
               <% record.entreprise.ues.entreprises.forEach(ues => { %>
                 <li><%= ues.raison_sociale %> (Siren : <%= ues.siren %>)</li>
