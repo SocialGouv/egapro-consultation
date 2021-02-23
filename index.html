@@ -41,6 +41,40 @@
     <form action="/search" class="row">
       <input type="search" name="q" value="" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
       <button rel="next"><img src="https://cdn3.iconfinder.com/data/icons/apply/32/apply_21-512.png" alt="Rechercher"></button>
+
+      <fieldset>
+        <h1>Rechercher par critères</h1>
+
+        <select name="region" title="Filtrer par région">
+          <option value="">Région</option>
+          <option value="03">PACA</option>
+        </select>
+
+        <select name="departement" title="Filtrer par département">
+          <option value="">Département</option>
+          <option value="06">Alpes-Maritimes</option>
+        </select>
+
+        <select name="code_naf" title="Filtrer par code NAF">
+          <option value="">Code NAF</option>
+          <option value="01-325Z">Culture du riz à triple pointes en Camargue du sud</option>
+        </select>
+
+        <article id="average">
+          <p>
+            <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
+          </p>
+          <button class=button>Voir la liste</button>
+        </article>
+          <!--
+limit
+offset
+code_naf
+departement
+region
+year -->
+        </select>
+      </fieldset>
     </form>
   </article>
 
@@ -151,9 +185,9 @@
     apiUrl: 'https://dev.egapro.fabrique.social.gouv.fr/api'
   }
 
-  ////////////////
-  /* State      */
-  ////////////////
+  ///////////
+  /* State */
+  ///////////
 
   const state = {
     csv_update: undefined,
@@ -173,26 +207,13 @@
   /* Templating */
   ////////////////
 
-  // Cache templates
-  const templates = Array.from(document.querySelectorAll('page')).reduce((templates, page) => {
-    const name = page.getAttribute('name')
-    templates[name] = page.innerHTML
-    return templates
-  }, {})
+  const template = document.body.innerHTML
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
 
-  function getTemplate(name) {
-    return templates[name]
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&amp;/g, '&')
-  }
-
-  async function render(name, data) {
+  async function render() {
     const state = await init()
-    const withState = {...state, ...data}
-    Array.from(document.querySelectorAll('page')).forEach((page) => {
-      page.removeAttribute('visible')
-    })
     const page = document.querySelector(`page[name="${name}"]`)
     page.setAttribute('visible', 'visible')
     const html = getTemplate(name)
