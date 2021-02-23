@@ -14,19 +14,32 @@ body {
   min-height: calc(100vh - 120px);
 }
 
+*:focus {
+  outline: none;
+}
+
   /* ********** */
  /* COMPONENTS */
 /* ********** */
 
 .button {
   display: inline-block;
-  padding: .5rem 2rem;
+  padding: .5rem 4rem;
   border-radius: 2rem;
   border: 1px solid rgb(150, 125, 225);
   color: rgb(150, 125, 225);
+  background-color: transparent;
   text-decoration: none;
   font-size: .9rem;
+  line-height: inherit;
 }
+
+.button.primary {
+  background-color: rgb(150, 125, 225);
+  color: #fff;
+  border: 1px solid #fff;
+}
+
 
 .content-wrapper {
   max-width: 1200px;
@@ -133,17 +146,17 @@ input {
   font: inherit;
 }
 
-#search-form {
+#search form {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-#search-form input {
+#search form input {
   width: 80%;
   margin-right: 0;
   border-right: 0;
 }
-#search-form button {
+#search form button {
   width: 45px;
   height: 40px;
   border: none;
@@ -151,7 +164,7 @@ input {
   cursor: pointer;
   margin-left: -50px;
 }
-#search-form button img {
+#search form button img {
   width: 100%;
   height: 100%;
 }
@@ -206,6 +219,11 @@ body > footer p {
  /* Specific content */
 /* **************** */
 
+article#download {
+  padding: 3rem 0;
+  background-color: #fff;
+}
+
 page {
   display: none;
 }
@@ -217,6 +235,20 @@ page[name=home] {
   text-align: center;
 }
 
+page[name=home] #average {
+  padding: 2rem 0;
+}
+page[name=home] #average p {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.3rem;
+}
+page[name=home] #average p span {
+  display: block;
+  font-size: 3rem;
+}
+
+
 page[name=search] {
   background: #fff;
 }
@@ -225,7 +257,9 @@ page[name=search] {
 }
 page[name=search] .result {
   display: flex;
+  flex-wrap: wrap;
   color: #000;
+  margin: 0 0 2rem 0;
 }
 page[name=search] .result header {
   width: 30%;
@@ -241,7 +275,6 @@ page[name=search] .result p {
 page[name=search] .result > * {
   border-right: 1px solid #777;
   padding: 0 2rem;
-  margin: 2rem 0;
 }
 page[name=search] .result > section {
   text-transform: uppercase;
@@ -252,11 +285,27 @@ page[name=search] .result > *:first-child {
 page[name=search] .result > section:first-of-type {
   width: 15%;
 }
-page[name=search] .result > *:last-child {
+page[name=search] .result > *:last-of-type {
   border-right: none;
 }
 page[name=search] .department {
   font-weight: lighter;
   color: #555;
   font-size: .9rem;
+}
+
+page[name=search] details {
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-basis: 100%;
+  font-size: .9rem;
+}
+page[name=search] details summary {
+  cursor: pointer;
+}
+page[name=search] details ol {
+  line-height: 2;
+}
+page[name=search] details summary:focus {
+  outline: none;
 }

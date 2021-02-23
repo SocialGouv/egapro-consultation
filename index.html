@@ -13,7 +13,7 @@
   if (typeof Sentry !== "undefined") {
     Sentry.init({
       dsn: 'https://c98522783c284ae1ada779bc05a57a96@sentry.fabrique.social.gouv.fr/51',
-      release: '2021.02.19'
+      release: '2021.02.23'
     })
   }
 </script>
@@ -42,26 +42,47 @@
     </blockquote>
   </article>
 
-  <article id=search>
-    <h1>Rechercher par raison sociale</h1>
-    <form action="/search" class="row" id="search-form">
-      <input type="search" name="q" value="" placeholder="Tapez le nom d'une entreprise">
+  <article id="search">
+    <h1>Rechercher par raison sociale ou numéro SIREN</h1>
+    <form action="/search" class="row">
+      <input type="search" name="q" value="" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
       <button rel="next"><img src="https://cdn3.iconfinder.com/data/icons/apply/32/apply_21-512.png" alt="Rechercher"></button>
     </form>
   </article>
 
   <page name="home">
-    <p>
-      Vous souhaitez consulter les données de toutes les entreprises ?
-      <br>
-      Téléchargez le fichier recensant toutes les déclarations <span id="csv-date"><% if (state.csv_update) { %>au <%= state.csv_update %><% } else { %>actuelles<% } %><span> au format tableur (.csv) :
-    </p>
+    <article id="average">
+      <p>
+        <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
+      </p>
+      <!-- <a class="button primary" href="/search">Voir la liste</a> -->
+    </article>
+
+    <article id="download">
+      <p>
+        Vous souhaitez consulter les données de toutes les entreprises ?
+        <br>
+        Téléchargez le fichier recensant toutes les déclarations <span id="csv-date">
+          <% if (state.csv_update) { %>
+            au <%= state.csv_update %>
+          <% } else { %>
+            actuelles
+          <% } %>
+          <span> au format tableur (.csv) :
+      </p>
+    </article>
+
     <a class="button" href="/index-egalite-fh.csv" download>⤓ Télécharger</a>
   </page>
 
   <page name="search">
     <div class="content-wrapper">
-      <h1><%= data.length %> résultat<% if(data.length > 1) { %>s<% } %></h1>
+      <h1>
+        <%= data.length %> résultat<% if(data.length > 1) { %>s<% } %>
+        <% if(count > data.length) { %>
+          sur <%= count %> existant
+        <% } %>
+      </h1>
       <% data.forEach((record) => { %>
 
       <article class=result>
@@ -72,7 +93,7 @@
         </header>
         <section>
           <h3>
-            <% if(record.entreprise.effectif.tranche.includes('1000')) { %>
+            <% if(record.entreprise.effectif.tranche && record.entreprise.effectif.tranche.includes('1000')) { %>
               Plus de 1000
           <% } else { %>
               251 à 1000
@@ -86,6 +107,16 @@
             <p>En <%= declaration[0] %></p>
           </section>
         <% }) %>
+        <% if(record.entreprise.ues) { %>
+          <details>
+            <summary>Voir les entreprises composannt l'UES ></summary>
+            <ol>
+              <% record.entreprise.ues.entreprises.forEach(ues => { %>
+                <li><%= ues.raison_sociale %> (Siren : <%= ues.siren %>)</li>
+              <% }) %>
+            </ol>
+          </details>
+        <% } %>
       </article>
       <% }) %>
     </div>
@@ -111,8 +142,8 @@
       </aside>
     </section>
     <nav>
-      <a href="https://voxusagers.numerique.gouv.fr/Demarches/2240?&amp;view-mode=formulaire-avis&amp;nd_mode=en-ligne-enti%C3%A8rement&amp;nd_source=button&amp;key=73366ddb13d498f4c77d01c2983bab48" target="_blank" rel="noopener noreferrer">donnez-nous votre avis</a>
-      <a href="https://github.com/SocialGouv/egapro-consultation/tree/2021.02.19" target="_blank" rel="noopener noreferrer">contribuez sur Github</a>
+      <a href="https://voxusagers.numerique.gouv.fr/Demarches/2240?&amp;view-mode=formulaire-avis&amp;nd_mode=en-ligne-enti%C3%A8rement&amp;nd_source=button&amp;key=73366ddb13d498f4c77d01c2983bab48" target="_blank" rel="noopener noreferrer">Donnez-nous votre avis</a>
+      <a href="https://github.com/SocialGouv/egapro-consultation/tree/2021.02.23" target="_blank" rel="noopener noreferrer">Contribuez sur Github</a>
       <a href="mailto:index@travail.gouv.fr?subject=À propos du site de consultation">Contact</a>
     </nav>
   </div>
@@ -131,14 +162,17 @@
   ////////////////
 
   const state = {
-    csv_update: undefined
+    csv_update: undefined,
+    current_year: (new Date()).getFullYear(),
+    stats: { count: 0, avg: 0, min: 0, max: 0 }
   }
 
   async function init() {
-    const response = await request('head', "/index-egalite-fh.csv")
-    if (!response.ok) return
-    const lastModified = new Date(response.headers.get('last-modified'))
+    const responseCsv = await request('head', "/index-egalite-fh.csv")
+    const lastModified = new Date(responseCsv.headers.get('last-modified'))
     state.csv_update = lastModified.toLocaleDateString()
+    const responseSearch = await api('get', "/search")
+    state.stats = responseSearch.data
   }
 
   ////////////////
@@ -153,7 +187,10 @@
   }, {})
 
   function getTemplate(name) {
-    return templates[name].replaceAll('&lt;', '<').replaceAll('&gt;', '>')
+    return templates[name]
+      .replaceAll('&lt;', '<')
+      .replaceAll('&gt;', '>')
+      .replaceAll('&amp;', '&')
   }
 
   async function render(name, data) {
@@ -184,7 +221,7 @@
   })
 
   page('/search', async (req) => {
-    const response = await request('GET', `${config.apiUrl}/search?${req.query}`)
+    const response = await api('GET', `/search?${req.query}`)
     render('search', response.data)
   })
 
@@ -203,6 +240,10 @@
       page(`${pathname}?${queryParams}`)
     })
   })
+
+  function api(method, uri) {
+    return request(method, `${config.apiUrl}${uri}`)
+  }
 </script>
 
 </html>
