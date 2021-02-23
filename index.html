@@ -86,6 +86,16 @@
             <p>En <%= declaration[0] %></p>
           </section>
         <% }) %>
+        <% if(record.entreprise.ues) { %>
+          <details>
+            <summary><%= record.entreprise.ues.nom %></summary>
+            <ol>
+              <% record.entreprise.ues.entreprises.forEach(ues => { %>
+                <li><%= ues.raison_sociale %> (Siren : <%= ues.siren %>)</li>
+              <% }) %>
+            </ol>
+          </details>
+        <% } %>
       </article>
       <% }) %>
     </div>

@@ -225,7 +225,9 @@ page[name=search] {
 }
 page[name=search] .result {
   display: flex;
+  flex-wrap: wrap;
   color: #000;
+  margin: 0 0 2rem 0;
 }
 page[name=search] .result header {
   width: 30%;
@@ -241,7 +243,6 @@ page[name=search] .result p {
 page[name=search] .result > * {
   border-right: 1px solid #777;
   padding: 0 2rem;
-  margin: 2rem 0;
 }
 page[name=search] .result > section {
   text-transform: uppercase;
@@ -252,11 +253,27 @@ page[name=search] .result > *:first-child {
 page[name=search] .result > section:first-of-type {
   width: 15%;
 }
-page[name=search] .result > *:last-child {
+page[name=search] .result > *:last-of-type {
   border-right: none;
 }
 page[name=search] .department {
   font-weight: lighter;
   color: #555;
   font-size: .9rem;
+}
+
+page[name=search] details {
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-basis: 100%;
+  font-size: .9rem;
+}
+page[name=search] details summary {
+  cursor: pointer;
+}
+page[name=search] details ol {
+  line-height: 2;
+}
+page[name=search] details summary:focus {
+  outline: none;
 }
