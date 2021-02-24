@@ -146,6 +146,9 @@ input {
   font: inherit;
 }
 
+#search {
+  padding: 2rem 0;
+}
 #search form {
   display: flex;
   justify-content: center;
