@@ -182,9 +182,9 @@
 
   function getTemplate(name) {
     return templates[name]
-      .replaceAll('&lt;', '<')
-      .replaceAll('&gt;', '>')
-      .replaceAll('&amp;', '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&')
   }
 
   async function render(name, data) {
