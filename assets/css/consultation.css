@@ -178,7 +178,7 @@ input {
   flex-basis: 80%;
   border: 0;
   padding: 0;
-  margin: 3rem 0;
+  margin-top: 3rem;
 }
 
 #search select {
@@ -271,6 +271,7 @@ article[name=home] {
 article[name=search] {
   background: #fff;
   padding-top: 3rem;
+  text-align: left;
 }
 article[name=search] .result {
   display: flex;
@@ -289,20 +290,19 @@ article[name=search] .result h3 {
 article[name=search] .result p {
   margin: 0 0 .3rem 0;
 }
-article[name=search] .result > * {
+article[name=search] .result > header,
+article[name=search] .result > section {
   border-right: 1px solid #777;
   padding: 0 2rem;
 }
 article[name=search] .result > section {
   text-transform: uppercase;
+  text-align: center;
 }
 article[name=search] .result > *:first-child {
   padding-left: 0;
 }
-article[name=search] .result > section:first-of-type {
-  width: 15%;
-}
-article[name=search] .result > *:last-of-type {
+article[name=search] .result > section:last-of-type {
   border-right: none;
 }
 article[name=search] .department {
@@ -310,7 +310,6 @@ article[name=search] .department {
   color: #555;
   font-size: .9rem;
 }
-
 article[name=search] details {
   margin: 0 !important;
   padding: 0 !important;

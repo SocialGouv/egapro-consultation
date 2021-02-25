@@ -116,7 +116,7 @@
         <header>
           <h1><%= record.entreprise.raison_sociale %></h1>
           <p>SIREN : <%= record.entreprise.siren %></p>
-          <p class=department>Département <%= record.entreprise.département %></p>
+          <p class=department>Département <%= state.config.DEPARETMENTS %></p>
         </header>
         <section>
           <h3>
@@ -208,8 +208,6 @@
     const responseCsv = await request('head', "/index-egalite-fh.csv")
     const lastModified = new Date(responseCsv.headers.get('last-modified'))
     state.csv_update = lastModified.toLocaleDateString()
-    const responseSearch = await api('get', "/search")
-    state.stats = responseSearch.data
     const responseConfig = await api('get', "/config")
     state.config = responseConfig.data
 
@@ -267,7 +265,9 @@
     next()
   })
 
-  page('/', () => {
+  page('/', async () => {
+    const responseSearch = await api('get', "/search")
+    state.stats = responseSearch.data
     state.current_page = 'home'
     render()
   })
@@ -278,6 +278,7 @@
     const response = await api('GET', `/search?${paramsWithValue}`)
     state.current_page = 'search'
     state.results = response.data
+    state.stats = response.data
     state.filters = Array.from(paramsWithValue.entries()).reduce((filters, [key, value]) => {
       filters[key] = value
       return filters
