@@ -23,11 +23,11 @@
     <a href="https://travail-emploi.gouv.fr/" target="_blank">
       <img src="assets/img/marianne-header.png" alt="Ministère du travail, de l'emploi et de l'insertion. Liberté, égalité, fraternité">
     </a>
-    <a href="/">
+    <a href="#!/">
       <img src="assets/img/logo.png" alt="Index Égalité Femme/Homme">
     </a>
     <hgroup>
-      <h1><a href="#">Index Égalité Professionnelle</a></h1>
+      <h1><a href="#!/">Index Égalité Professionnelle</a></h1>
     </hgroup>
     <p hidden>
       <a>Comment l'index est-il calculé ?</a>
@@ -38,7 +38,7 @@
 <main>
   <article id="search">
     <h1>Rechercher l'index de l'égalité professionnelle d'une entreprise de 1000 salariés ou plus</h1>
-    <form action="/search" class="row">
+    <form action="#!/search" class="row">
       <input type="search" name="q" value="" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
       <button rel="next"><img src="https://cdn3.iconfinder.com/data/icons/apply/32/apply_21-512.png" alt="Rechercher"></button>
 
@@ -64,54 +64,41 @@
           <p>
             <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
           </p>
-          <button class=button>Voir la liste</button>
+          <!-- <a href="#" class="button primary">Voir la liste</a> -->
         </article>
-          <!--
-limit
-offset
-code_naf
-departement
-region
-year -->
         </select>
       </fieldset>
     </form>
   </article>
 
-  <page name="home">
-    <article id="average">
-      <p>
-        <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
-      </p>
-      <!-- <a class="button primary" href="/search">Voir la liste</a> -->
-    </article>
+  <% if (state.current_page == 'home') { %>
+  <article id="download">
+    <p>
+      Vous souhaitez consulter les données de toutes les entreprises ?
+      <br>
+      Téléchargez le fichier recensant toutes les déclarations <span id="csv-date">
+        <% if (state.csv_update) { %>
+          au <%= state.csv_update %>
+        <% } else { %>
+          actuelles
+        <% } %>
+        <span> au format tableur (.csv) :
+    </p>
+  </article>
 
-    <article id="download">
-      <p>
-        Vous souhaitez consulter les données de toutes les entreprises ?
-        <br>
-        Téléchargez le fichier recensant toutes les déclarations <span id="csv-date">
-          <% if (state.csv_update) { %>
-            au <%= state.csv_update %>
-          <% } else { %>
-            actuelles
-          <% } %>
-          <span> au format tableur (.csv) :
-      </p>
-    </article>
+  <a class="button" href="/index-egalite-fh.csv" download>⤓ Télécharger</a>
+  <% } %>
 
-    <a class="button" href="/index-egalite-fh.csv" download>⤓ Télécharger</a>
-  </page>
-
+  <% if (state.current_page == 'search') { %>
   <page name="search">
     <div class="content-wrapper">
       <h1>
-        <%= data.length %> résultat<% if(data.length > 1) { %>s<% } %>
-        <% if(count > data.length) { %>
-          sur <%= count %> existant
+        <%= state.results.data.length %> résultat<% if(state.results.data.length > 1) { %>s<% } %>
+        <% if(state.results.count > state.results.data.length) { %>
+          sur <%= state.results.count %> existant
         <% } %>
       </h1>
-      <% data.forEach((record) => { %>
+      <% state.results.data.forEach((record) => { %>
 
       <article class=result>
         <header>
@@ -149,10 +136,13 @@ year -->
       <% }) %>
     </div>
   </page>
+  <% } %>
 
+  <% if(state.current_page == '404') { %>
   <page name="404">
     La page demandée n'existe pas
   </page>
+  <% } %>
 </main>
 
 <footer>
@@ -192,7 +182,8 @@ year -->
   const state = {
     csv_update: undefined,
     current_year: (new Date()).getFullYear() - 1,
-    stats: { count: 0, avg: 0, min: 0, max: 0 }
+    stats: { count: 0, avg: 0, min: 0, max: 0 },
+    results: { count: 0, data: [] },
   }
 
   async function init() {
@@ -201,6 +192,10 @@ year -->
     state.csv_update = lastModified.toLocaleDateString()
     const responseSearch = await api('get', "/search")
     state.stats = responseSearch.data
+
+    // Start page router
+    page({ hashbang: true })
+    document.body.classList.add('ready')
   }
 
   ////////////////
@@ -212,12 +207,8 @@ year -->
     .replace(/&gt;/g, '>')
     .replace(/&amp;/g, '&')
 
-  async function render() {
-    const state = await init()
-    const page = document.querySelector(`page[name="${name}"]`)
-    page.setAttribute('visible', 'visible')
-    const html = getTemplate(name)
-    page.innerHTML= ejs.render(html, withState)
+  function render() {
+    document.body.innerHTML = ejs.render(template, state)
   }
 
 
@@ -232,26 +223,28 @@ year -->
   })
 
   page('/', () => {
-    render('home')
+    state.current_page = 'home'
+    render()
   })
 
   page('/search', async (req) => {
     const response = await api('GET', `/search?${req.query}`)
-    render('search', response.data)
+    state.current_page = 'search'
+    state.results = response.data
+    render()
   })
 
   page('*', () => {
-    render('404')
+    state.current_page = '404'
+    render()
   })
-
-  page({ hashbang: true })
 
   // Route also form action as hashbang
   Array.from(document.querySelectorAll('form')).forEach((form) => {
     form.addEventListener('submit', (event) => {
       event.preventDefault()
       const queryParams = new URLSearchParams(new FormData(form))
-      const pathname = new URL(form.action).pathname
+      const pathname = new URL(form.action).hash
       page(`${pathname}?${queryParams}`)
     })
   })
@@ -259,6 +252,8 @@ year -->
   function api(method, uri) {
     return request(method, `${config.apiUrl}${uri}`)
   }
+
+  init()
 </script>
 
 </html>

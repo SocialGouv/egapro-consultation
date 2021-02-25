@@ -188,6 +188,13 @@ input {
   width: 32%;
 }
 
+body {
+  opacity: 0;
+  transition: opacity 1s;
+}
+body.ready {
+  opacity: 1;
+}
 body > footer {
   border-top: #eee solid 1px;
   margin-top: 2rem;
@@ -241,13 +248,6 @@ body > footer p {
 article#download {
   padding: 3rem 0;
   background-color: #fff;
-}
-
-page {
-  display: none;
-}
-page[visible] {
-  display: block;
 }
 
 page[name=home] {
