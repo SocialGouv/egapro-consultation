@@ -76,7 +76,7 @@
           <p>
             <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
           </p>
-          <!-- <a href="#" class="button primary">Voir la liste</a> -->
+          <a href="/search" class="button primary">Voir la liste</a>
         </article>
         </select>
       </fieldset>
@@ -110,10 +110,11 @@
         <% if(state.results.count > state.results.data.length) { %>
           sur <%= state.results.count %> existant
         <% } %>
-        </h1>
+      </h1>
       <% } else { %>
         <p id=no-result>Aucun résultat ne correspond à votre recherche. Veuillez adapter votre recherche.</p>
       <% } %>
+
       <% state.results.data.forEach((record) => { %>
 
       <article class=result>
@@ -150,6 +151,11 @@
         <% } %>
       </article>
       <% }) %>
+      <% if(state.results.count > state.results.data.length) { %>
+        <footer>
+          <button onclick="moreResults()" class="button">Voir les résultats suivants…</button>
+        </footer>
+      <% } %>
     </div>
   </article>
   <% } %>
@@ -277,16 +283,31 @@
   })
 
   page('/search', async (req) => {
-    // Avoid the API to consider empty values
+    // Avoid the API to consider empty values, remove them
     const paramsWithValue = new URLSearchParams(Array.from(req.query).filter(pair => pair[1]))
+    const page = Number(paramsWithValue.get('page'))
+
+    // Pagination
+    if(page) {
+      paramsWithValue.set('offset', page * 10)
+      paramsWithValue.delete('page')
+    }
+
     const response = await api('GET', `/search?${paramsWithValue}`)
-    state.current_page = 'search'
-    state.results = response.data
-    state.stats = response.data
-    state.filters = Array.from(paramsWithValue.entries()).reduce((filters, [key, value]) => {
-      filters[key] = value
-      return filters
-    }, {})
+
+    // Update state
+    Object.assign(state, {
+      current_page: 'search',
+      stats: response.data,
+      results: {
+        count: response.data.count,
+        data: state.results.data.concat(response.data.data)
+      },
+      filters: Array.from(paramsWithValue.entries()).reduce((filters, [key, value]) => {
+        filters[key] = value
+        return filters
+      }, {})
+    })
     render()
   })
 
@@ -294,6 +315,12 @@
     state.current_page = '404'
     render()
   })
+
+  function moreResults() {
+    const queryParams = new URLSearchParams(page.current.split('?')[1])
+    queryParams.set('page', Number(queryParams.get('page') || 1) + 1)
+    page.redirect(`/search?${queryParams}`)
+  }
 
   init()
 </script>
