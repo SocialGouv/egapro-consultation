@@ -325,3 +325,6 @@ article[name=search] details ol {
 article[name=search] details summary:focus {
   outline: none;
 }
+#no-result {
+  text-align: center;
+}
