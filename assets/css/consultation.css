@@ -250,81 +250,79 @@ article#download {
   background-color: #fff;
 }
 
-page[name=home] {
-  text-align: center;
-}
-
-page[name=home] #average {
+#average {
   padding: 2rem 0;
 }
-page[name=home] #average p {
+#average p {
   font-weight: bold;
   text-transform: uppercase;
   font-size: 1.3rem;
 }
-page[name=home] #average p span {
+#average p span {
   display: block;
   font-size: 3rem;
 }
 
-
-page[name=search] {
-  background: #fff;
+article[name=home] {
+  text-align: center;
 }
-page[name=search] {
+
+
+article[name=search] {
+  background: #fff;
   padding-top: 3rem;
 }
-page[name=search] .result {
+article[name=search] .result {
   display: flex;
   flex-wrap: wrap;
   color: #000;
   margin: 0 0 2rem 0;
 }
-page[name=search] .result header {
+article[name=search] .result header {
   width: 30%;
 }
-page[name=search] .result h1,
-page[name=search] .result h3 {
+article[name=search] .result h1,
+article[name=search] .result h3 {
   text-transform: uppercase;
   margin: 0 0 .2rem 0;
 }
-page[name=search] .result p {
+article[name=search] .result p {
   margin: 0 0 .3rem 0;
 }
-page[name=search] .result > * {
+article[name=search] .result > * {
   border-right: 1px solid #777;
   padding: 0 2rem;
 }
-page[name=search] .result > section {
+article[name=search] .result > section {
   text-transform: uppercase;
 }
-page[name=search] .result > *:first-child {
+article[name=search] .result > *:first-child {
   padding-left: 0;
 }
-page[name=search] .result > section:first-of-type {
+article[name=search] .result > section:first-of-type {
   width: 15%;
 }
-page[name=search] .result > *:last-of-type {
+article[name=search] .result > *:last-of-type {
   border-right: none;
 }
-page[name=search] .department {
+article[name=search] .department {
   font-weight: lighter;
   color: #555;
   font-size: .9rem;
 }
 
-page[name=search] details {
+article[name=search] details {
   margin: 0 !important;
   padding: 0 !important;
   flex-basis: 100%;
   font-size: .9rem;
 }
-page[name=search] details summary {
+article[name=search] details summary {
   cursor: pointer;
 }
-page[name=search] details ol {
+article[name=search] details ol {
   line-height: 2;
 }
-page[name=search] details summary:focus {
+article[name=search] details summary:focus {
   outline: none;
 }
