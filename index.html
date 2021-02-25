@@ -175,6 +175,10 @@
     apiUrl: 'https://dev.egapro.fabrique.social.gouv.fr/api'
   }
 
+  function api(method, uri) {
+    return request(method, `${config.apiUrl}${uri}`)
+  }
+
   ///////////
   /* State */
   ///////////
@@ -195,6 +199,17 @@
 
     // Start page router
     page({ hashbang: true })
+
+    // Handle form submition to redirect to hash
+    Array.from(document.querySelectorAll('form')).forEach((form) => {
+      form.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const queryParams = new URLSearchParams(new FormData(form))
+        const pathname = new URL(form.action).hash
+        page(`${pathname}?${queryParams}`)
+      })
+    })
+
     document.body.classList.add('ready')
   }
 
@@ -228,7 +243,9 @@
   })
 
   page('/search', async (req) => {
-    const response = await api('GET', `/search?${req.query}`)
+    // Avoid the API to consider empty values
+    const paramsWithValue = new URLSearchParams(Array.from(req.query).filter(pair => pair[1]))
+    const response = await api('GET', `/search?${paramsWithValue}`)
     state.current_page = 'search'
     state.results = response.data
     render()
@@ -238,20 +255,6 @@
     state.current_page = '404'
     render()
   })
-
-  // Route also form action as hashbang
-  Array.from(document.querySelectorAll('form')).forEach((form) => {
-    form.addEventListener('submit', (event) => {
-      event.preventDefault()
-      const queryParams = new URLSearchParams(new FormData(form))
-      const pathname = new URL(form.action).hash
-      page(`${pathname}?${queryParams}`)
-    })
-  })
-
-  function api(method, uri) {
-    return request(method, `${config.apiUrl}${uri}`)
-  }
 
   init()
 </script>
