@@ -39,7 +39,7 @@
   <article id="search">
     <h1>Rechercher l'index de l'égalité professionnelle d'une entreprise de 1000 salariés ou plus</h1>
     <form action="#!/search" class="row">
-      <input type="search" name="q" value="" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
+      <input type="search" name="q" value="<%= state.filters.q %>" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
       <button rel="next"><img src="https://cdn3.iconfinder.com/data/icons/apply/32/apply_21-512.png" alt="Rechercher"></button>
 
       <fieldset>
@@ -47,17 +47,29 @@
 
         <select name="region" title="Filtrer par région">
           <option value="">Région</option>
-          <option value="03">PACA</option>
+          <% for(code in state.config.REGIONS){ %>
+          <option value="<%= code %>" selected="<%= state.filters.region == code %>">
+            <%= state.config.REGIONS[code] %>
+          </option>
+          <% } %>
         </select>
 
         <select name="departement" title="Filtrer par département">
           <option value="">Département</option>
-          <option value="06">Alpes-Maritimes</option>
+          <% for(code in state.config.DEPARTEMENTS){ %>
+            <option value="<%= code %>" selected="<%= state.filters.departement == code %>">
+              <%= state.config.DEPARTEMENTS[code] %>
+            </option>
+          <% } %>
         </select>
 
         <select name="code_naf" title="Filtrer par code NAF">
           <option value="">Code NAF</option>
-          <option value="01-325Z">Culture du riz à triple pointes en Camargue du sud</option>
+          <% for(code in state.config.NAF){ %>
+            <option value="<%= code %>" selected="<%= state.filters.code_naf == code %>">
+              <%= code %> – <%= state.config.NAF[code] %>
+            </option>
+          <% } %>
         </select>
 
         <article id="average">
@@ -90,7 +102,7 @@
   <% } %>
 
   <% if (state.current_page == 'search') { %>
-  <page name="search">
+  <article name="search">
     <div class="content-wrapper">
       <h1>
         <%= state.results.data.length %> résultat<% if(state.results.data.length > 1) { %>s<% } %>
@@ -135,13 +147,13 @@
       </article>
       <% }) %>
     </div>
-  </page>
+  </article>
   <% } %>
 
   <% if(state.current_page == '404') { %>
-  <page name="404">
+  <article name="404">
     La page demandée n'existe pas
-  </page>
+  </article>
   <% } %>
 </main>
 
@@ -188,6 +200,8 @@
     current_year: (new Date()).getFullYear() - 1,
     stats: { count: 0, avg: 0, min: 0, max: 0 },
     results: { count: 0, data: [] },
+    config: {},
+    filters: {},
   }
 
   async function init() {
@@ -196,19 +210,11 @@
     state.csv_update = lastModified.toLocaleDateString()
     const responseSearch = await api('get', "/search")
     state.stats = responseSearch.data
+    const responseConfig = await api('get', "/config")
+    state.config = responseConfig.data
 
     // Start page router
     page({ hashbang: true })
-
-    // Handle form submition to redirect to hash
-    Array.from(document.querySelectorAll('form')).forEach((form) => {
-      form.addEventListener('submit', (event) => {
-        event.preventDefault()
-        const queryParams = new URLSearchParams(new FormData(form))
-        const pathname = new URL(form.action).hash
-        page(`${pathname}?${queryParams}`)
-      })
-    })
 
     document.body.classList.add('ready')
   }
@@ -224,6 +230,29 @@
 
   function render() {
     document.body.innerHTML = ejs.render(template, state)
+
+    // Handle form submition to redirect to hash
+    Array.from(document.querySelectorAll('form')).forEach((form) => {
+      form.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const queryParams = new URLSearchParams(new FormData(form))
+        const pathname = new URL(form.action).hash
+        page(`${pathname}?${queryParams}`)
+      })
+    })
+
+    // Boolean attributes cannot be propertly rendered with this template engine
+    // They are therefore rendered as `selected="true"` and should be cleaned up
+    document.querySelectorAll('[selected]').forEach(node => {
+      const attr = node.getAttribute('selected')
+      if(attr === 'false') {
+        node.selected = false
+        node.removeAttribute('selected')
+      }
+      else if(attr === 'true') {
+        node.selected = true
+      }
+    })
   }
 
 
@@ -248,6 +277,10 @@
     const response = await api('GET', `/search?${paramsWithValue}`)
     state.current_page = 'search'
     state.results = response.data
+    state.filters = Array.from(paramsWithValue.entries()).reduce((filters, [key, value]) => {
+      filters[key] = value
+      return filters
+    }, {})
     render()
   })
 
