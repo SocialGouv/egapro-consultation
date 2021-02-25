@@ -215,8 +215,6 @@
 
     // Start page router
     page({ hashbang: true })
-
-    document.body.classList.add('ready')
   }
 
   ////////////////
@@ -229,6 +227,9 @@
     .replace(/&amp;/g, '&')
 
   function render() {
+    // First rendering, avoid first load flash glitch
+    if(!document.body.classList.contains('ready')) document.body.classList.add('ready')
+
     document.body.innerHTML = ejs.render(template, state)
 
     // Handle form submition to redirect to hash
