@@ -158,11 +158,9 @@ input {
 #search form input {
   width: 80%;
   margin-right: 0;
-  border-right: 0;
 }
 #search form button {
   width: 45px;
-  height: 40px;
   border: none;
   background-color: transparent;
   cursor: pointer;
