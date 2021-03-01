@@ -103,7 +103,7 @@
         <% }) %>
         <% if(record.entreprise.ues) { %>
           <details>
-            <summary>Voir les entreprises composannt l'UES ></summary>
+            <summary>Voir les entreprises composannt l'UES</summary>
             <ol>
               <% record.entreprise.ues.entreprises.forEach(ues => { %>
                 <li><%= ues.raison_sociale %> (Siren : <%= ues.siren %>)</li>
