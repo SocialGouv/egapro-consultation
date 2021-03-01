@@ -331,6 +331,7 @@ article[name=search] footer {
     flex-wrap: wrap;
     color: #000;
     margin: 0 0 2rem 0;
+    border-bottom: none;
   }
   article[name=search] .result header {
     width: 30%;
