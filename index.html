@@ -98,7 +98,7 @@
         <% Object.entries(record.notes).sort().reverse().forEach((declaration) => { %>
           <section>
             <h3><%= declaration[1] %></h3>
-            <p>En <%= declaration[0] %></p>
+            <p>Index <%= Number(declaration[0]) + 1 %></p>
           </section>
         <% }) %>
         <% if(record.entreprise.ues) { %>
