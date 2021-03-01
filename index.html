@@ -47,20 +47,20 @@
 
         <select name="region" title="Filtrer par région">
           <option value="">Région</option>
-          <% for(code in state.config.REGIONS){ %>
+          <% Object.entries(state.config.REGIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
           <option value="<%= code %>" selected="<%= state.filters.region == code %>">
             <%= state.config.REGIONS[code] %>
           </option>
-          <% } %>
+          <% }) %>
         </select>
 
         <select name="departement" title="Filtrer par département">
           <option value="">Département</option>
-          <% for(code in state.config.DEPARTEMENTS){ %>
+          <% Object.entries(state.config.DEPARTEMENTS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
             <option value="<%= code %>" selected="<%= state.filters.departement == code %>">
               <%= state.config.DEPARTEMENTS[code] %>
             </option>
-          <% } %>
+          <% }) %>
         </select>
 
         <select name="code_naf" title="Filtrer par code NAF">
