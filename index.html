@@ -45,7 +45,7 @@
       <fieldset>
         <h1>Rechercher par critères</h1>
 
-        <select name="region" title="Filtrer par région">
+        <select name="region" title="Filtrer par région" onchange="updateFilters(this.form)">
           <option value="">Région</option>
           <% Object.entries(state.config.REGIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
           <option value="<%= code %>" selected="<%= state.filters.region == code %>">
@@ -54,7 +54,7 @@
           <% }) %>
         </select>
 
-        <select name="departement" title="Filtrer par département">
+        <select name="departement" title="Filtrer par département" onchange="updateFilters(this.form)">
           <option value="">Département</option>
           <% Object.entries(state.config.DEPARTEMENTS)
             .sort((a, b) => a[1].localeCompare(b[1]))
@@ -68,7 +68,7 @@
           <% }) %>
         </select>
 
-        <select name="code_naf" title="Filtrer par code NAF">
+        <select name="code_naf" title="Filtrer par code NAF" onchange="updateFilters(this.form)">
           <option value="">Code NAF</option>
           <% for(code in state.config.NAF){ %>
             <option value="<%= code %>" selected="<%= state.filters.code_naf == code %>">
@@ -253,9 +253,7 @@
     Array.from(document.querySelectorAll('form')).forEach((form) => {
       form.addEventListener('submit', (event) => {
         event.preventDefault()
-        const queryParams = new URLSearchParams(new FormData(form))
-        const pathname = new URL(form.action).hash
-        page(`${pathname}?${queryParams}`)
+        updateFilters(form)
       })
     })
 
@@ -271,6 +269,12 @@
         node.selected = true
       }
     })
+  }
+
+  function updateFilters(form) {
+    const queryParams = new URLSearchParams(new FormData(form))
+    const pathname = new URL(form.action).hash
+    page(`${pathname}?${queryParams}`)
   }
 
 
