@@ -56,7 +56,12 @@
 
         <select name="departement" title="Filtrer par département">
           <option value="">Département</option>
-          <% Object.entries(state.config.DEPARTEMENTS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
+          <% Object.entries(state.config.DEPARTEMENTS)
+            .sort((a, b) => a[1].localeCompare(b[1]))
+            .filter(([code, name]) => state.filters.region
+              ? state.config.REGIONS_TO_DEPARTEMENTS[state.filters.region].includes(code)
+              : true)
+            .map(([code, name]) => { %>
             <option value="<%= code %>" selected="<%= state.filters.departement == code %>">
               <%= state.config.DEPARTEMENTS[code] %>
             </option>
