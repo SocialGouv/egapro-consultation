@@ -40,10 +40,10 @@
     <h1>Rechercher l'index de l'égalité professionnelle d'une entreprise de 1000 salariés ou plus</h1>
     <form action="#!/search" class="row">
       <input type="search" name="q" value="<%= state.filters.q %>" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
-      <button rel="next"><img src="https://cdn3.iconfinder.com/data/icons/apply/32/apply_21-512.png" alt="Rechercher"></button>
+      <button class="button primary">Rechercher</button>
 
       <fieldset>
-        <h1>Rechercher par critères</h1>
+        <h1>Index moyen par critères</h1>
 
         <select name="region" title="Filtrer par région" onchange="updateFilters(this.form)">
           <option value="">Région</option>

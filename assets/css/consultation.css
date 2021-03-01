@@ -164,15 +164,7 @@ input {
   margin-right: 0;
 }
 #search form button {
-  width: 45px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  margin-left: -50px;
-}
-#search form button img {
-  width: 100%;
-  height: 100%;
+  margin-top: 2rem;
 }
 
 #search fieldset {
@@ -272,6 +264,10 @@ article[name=search] {
   background: #fff;
   padding-top: 3rem;
   text-align: left;
+}
+
+article[name=search] .result {
+  border-bottom: 1px solid #ccc;
 }
 
 article[name=search] .department {
