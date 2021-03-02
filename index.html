@@ -13,7 +13,7 @@
   if (typeof Sentry !== "undefined") {
     Sentry.init({
       dsn: 'https://c98522783c284ae1ada779bc05a57a96@sentry.fabrique.social.gouv.fr/51',
-      release: '2021.02.26'
+      release: '2021.03.02'
     })
   }
 </script>
@@ -37,53 +37,59 @@
 
 <main>
   <article id="search">
-    <h1>Rechercher l'index de l'égalité professionnelle d'une entreprise de 1000 salariés ou plus</h1>
     <form action="#!/search" class="row">
-      <input type="search" name="q" value="<%= state.filters.q %>" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
-      <button rel="next"><img src="https://cdn3.iconfinder.com/data/icons/apply/32/apply_21-512.png" alt="Rechercher"></button>
-
-      <fieldset>
-        <h1>Rechercher par critères</h1>
-
-        <select name="region" title="Filtrer par région">
-          <option value="">Région</option>
-          <% for(code in state.config.REGIONS){ %>
-          <option value="<%= code %>" selected="<%= state.filters.region == code %>">
-            <%= state.config.REGIONS[code] %>
-          </option>
-          <% } %>
-        </select>
-
-        <select name="departement" title="Filtrer par département">
-          <option value="">Département</option>
-          <% for(code in state.config.DEPARTEMENTS){ %>
-            <option value="<%= code %>" selected="<%= state.filters.departement == code %>">
-              <%= state.config.DEPARTEMENTS[code] %>
-            </option>
-          <% } %>
-        </select>
-
-        <select name="code_naf" title="Filtrer par code NAF">
-          <option value="">Code NAF</option>
-          <% for(code in state.config.NAF){ %>
-            <option value="<%= code %>" selected="<%= state.filters.code_naf == code %>">
-              <%= code %> – <%= state.config.NAF[code] %>
-            </option>
-          <% } %>
-        </select>
-
-        <article id="average">
-          <p>
-            <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
-          </p>
-          <a href="/search" class="button primary">Voir la liste</a>
-        </article>
-        </select>
-      </fieldset>
+      <h1>Rechercher l'index de l'égalité professionnelle d'une entreprise de 1000 salariés ou plus</h1>
+      <input type="search" name="q" value="<%= state.filters.get('q') %>" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
+      <button class="button primary">Rechercher</button>
     </form>
   </article>
 
   <% if (state.current_page == 'home') { %>
+  <form action="#!/" id=filter-index>
+    <h1>Index moyen par critères</h1>
+
+    <fieldset>
+      <select name="region" title="Filtrer par région" onchange="submitForm(this.form)">
+        <option value="">Région</option>
+        <% Object.entries(state.config.REGIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
+        <option value="<%= code %>" selected="<%= state.filters.get('region') == code %>">
+          <%= state.config.REGIONS[code] %>
+        </option>
+        <% }) %>
+      </select>
+
+      <select name="departement" title="Filtrer par département" onchange="submitForm(this.form)">
+        <option value="">Département</option>
+        <% Object.entries(state.config.DEPARTEMENTS)
+          .sort((a, b) => a[1].localeCompare(b[1]))
+          .filter(([code, name]) => state.filters.get('region')
+            ? state.config.REGIONS_TO_DEPARTEMENTS[state.filters.get('region')].includes(code)
+            : true)
+          .map(([code, name]) => { %>
+          <option value="<%= code %>" selected="<%= state.filters.get('departement') == code %>">
+            <%= state.config.DEPARTEMENTS[code] %>
+          </option>
+        <% }) %>
+      </select>
+
+      <select name="section_naf" title="Filtrer par code NAF" onchange="submitForm(this.form)">
+        <option value="">Code NAF</option>
+        <% for(code in state.config.SECTIONS_NAF){ %>
+          <option value="<%= code %>" selected="<%= state.filters.get('section_naf') == code %>">
+            <%= state.config.SECTIONS_NAF[code] %>
+          </option>
+        <% } %>
+      </select>
+    </fieldset>
+  </form>
+
+  <article id="average">
+    <p>
+      <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
+    </p>
+    <a href="#!/search" class="button primary">Voir la liste</a>
+  </article>
+
   <article id="download">
     <p>
       Vous souhaitez consulter les données de toutes les entreprises ?
@@ -139,13 +145,13 @@
           <section>
             <p>
               <span><%= declaration[1] %></span>
-              En <%= declaration[0] %>
+              Index <%= Number(declaration[0]) + 1 %>
             </p>
           </section>
         <% }) %>
         <% if(record.entreprise.ues) { %>
           <details>
-            <summary>Voir les entreprises composannt l'UES ></summary>
+            <summary>Voir les entreprises composant l'UES</summary>
             <ol>
               <% record.entreprise.ues.entreprises.forEach(ues => { %>
                 <li><%= ues.raison_sociale %> (Siren : <%= ues.siren %>)</li>
@@ -187,7 +193,7 @@
     </section>
     <nav>
       <a href="https://voxusagers.numerique.gouv.fr/Demarches/2240?&amp;view-mode=formulaire-avis&amp;nd_mode=en-ligne-enti%C3%A8rement&amp;nd_source=button&amp;key=73366ddb13d498f4c77d01c2983bab48" target="_blank" rel="noopener noreferrer">Donnez-nous votre avis</a>
-      <a href="https://github.com/SocialGouv/egapro-consultation/tree/2021.02.26" target="_blank" rel="noopener noreferrer">Contribuez sur Github</a>
+      <a href="https://github.com/SocialGouv/egapro-consultation/tree/2021.03.02" target="_blank" rel="noopener noreferrer">Contribuez sur Github</a>
       <a href="mailto:index@travail.gouv.fr?subject=À propos du site de consultation">Contact</a>
     </nav>
   </div>
@@ -215,7 +221,7 @@
     stats: { count: 0, avg: 0, min: 0, max: 0 },
     results: { count: 0, data: [] },
     config: {},
-    filters: {},
+    filters: new URLSearchParams(),
   }
 
   async function init() {
@@ -248,9 +254,7 @@
     Array.from(document.querySelectorAll('form')).forEach((form) => {
       form.addEventListener('submit', (event) => {
         event.preventDefault()
-        const queryParams = new URLSearchParams(new FormData(form))
-        const pathname = new URL(form.action).hash
-        page(`${pathname}?${queryParams}`)
+        submitForm(form)
       })
     })
 
@@ -268,6 +272,20 @@
     })
   }
 
+  function submitForm(form) {
+    const queryParams = new URLSearchParams(new FormData(form))
+    const pathname = new URL(form.action).hash
+    page(`${pathname}?${queryParams}`)
+  }
+
+  function queryFilters(query) {
+    const paramsWithValue = new URLSearchParams(Array.from(query).filter(pair => pair[1]))
+    return Array.from(paramsWithValue.entries()).reduce((filters, [key, value]) => {
+        filters[key] = value
+        return filters
+      }, {})
+  }
+
 
   /////////////////
   /* Controllers */
@@ -276,28 +294,34 @@
   // Enable query params for router. This must remain before specific routes.
   page('*', (req, next) => {
     req.query = new URLSearchParams(req.path.split('?')[1])
+    req.filters = new URLSearchParams(Array.from(req.query).filter(pair => pair[1]))
     next()
   })
 
-  page('/', async () => {
-    const responseSearch = await api('get', "/search")
-    state.stats = responseSearch.data
+  page('/', async (req) => {
+    const response = await api('get', `/search?${req.filters}`)
+    state.stats = response.data
+    state.filters = req.filters
     state.current_page = 'home'
     render()
   })
 
   page('/search', async (req) => {
-    // Avoid the API to consider empty values, remove them
-    const paramsWithValue = new URLSearchParams(Array.from(req.query).filter(pair => pair[1]))
-    const page = Number(paramsWithValue.get('page'))
+    const filters = req.filters
+    const page = Number(filters.page)
 
     // Pagination
     if(page) {
-      paramsWithValue.set('offset', page * 10)
-      paramsWithValue.delete('page')
+      filters.set('offset', page * 10)
+      filters.delete('page')
     }
 
-    const response = await api('GET', `/search?${paramsWithValue}`)
+    const response = await api('GET', `/search?${filters}`)
+
+    // Check if the search has changed or if it's about paginating
+    const data = filters.get('q') == state.filters.get('q')
+      ? state.results.data.concat(response.data.data)
+      : response.data.data
 
     // Update state
     Object.assign(state, {
@@ -305,12 +329,9 @@
       stats: response.data,
       results: {
         count: response.data.count,
-        data: state.results.data.concat(response.data.data)
+        data
       },
-      filters: Array.from(paramsWithValue.entries()).reduce((filters, [key, value]) => {
-        filters[key] = value
-        return filters
-      }, {})
+      filters
     })
     render()
   })
