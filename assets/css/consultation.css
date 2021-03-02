@@ -156,12 +156,12 @@ form h1 {
   padding: 2rem 0;
 }
 #search form {
-  display: flex;
-  flex-wrap: wrap;
-  flex-basis: 100%;
-  justify-content: center;
-  align-items: center;
   width: 100%;
+}
+#search fieldset {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
 }
 #search input {
   width: 100%;

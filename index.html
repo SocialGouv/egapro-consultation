@@ -23,11 +23,11 @@
     <a href="https://travail-emploi.gouv.fr/" target="_blank">
       <img src="assets/img/marianne-header.png" alt="Ministère du travail, de l'emploi et de l'insertion. Liberté, égalité, fraternité">
     </a>
-    <a href="#!/">
+    <a href="/home">
       <img src="assets/img/logo.png" alt="Index Égalité Femme/Homme">
     </a>
     <hgroup>
-    <h1><a href="#!/">Index Égalité Professionnelle</a></h1>
+    <h1><a href="/home">Index Égalité Professionnelle</a></h1>
     </hgroup>
     <p hidden>
       <a>Comment l'index est-il calculé ?</a>
@@ -40,6 +40,43 @@
     <form action="#!/search" class="row">
       <h1>Rechercher l'index de l'égalité professionnelle d'une entreprise de 1000 salariés ou plus</h1>
       <input type="search" name="q" value="<%= state.filters.get('q') %>" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
+
+      <% if(state.current_page == 'search') { %>
+        <fieldset>
+          <select name="region" title="Filtrer par région">
+            <option value="">Région</option>
+            <% Object.entries(state.config.REGIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
+            <option value="<%= code %>" selected="<%= state.filters.get('region') == code %>">
+              <%= state.config.REGIONS[code] %>
+            </option>
+            <% }) %>
+          </select>
+
+          <select name="departement" title="Filtrer par département">
+            <option value="">Département</option>
+            <% Object.entries(state.config.DEPARTEMENTS)
+              .sort((a, b) => a[1].localeCompare(b[1]))
+              .filter(([code, name]) => state.filters.get('region')
+                ? state.config.REGIONS_TO_DEPARTEMENTS[state.filters.get('region')].includes(code)
+                : true)
+              .map(([code, name]) => { %>
+              <option value="<%= code %>" selected="<%= state.filters.get('departement') == code %>">
+                <%= state.config.DEPARTEMENTS[code] %>
+              </option>
+            <% }) %>
+          </select>
+
+          <select name="section_naf" title="Filtrer par code NAF">
+            <option value="">Secteur d'activité</option>
+            <% for(code in state.config.SECTIONS_NAF){ %>
+              <option value="<%= code %>" selected="<%= state.filters.get('section_naf') == code %>">
+                <%= state.config.SECTIONS_NAF[code] %>
+              </option>
+            <% } %>
+          </select>
+        </fieldset>
+      <% } %>
+
       <button class="button primary">Rechercher</button>
     </form>
   </article>
@@ -298,17 +335,19 @@
     next()
   })
 
-  page('/', async (req) => {
+  page('/', home)
+  page('/home', home)
+  async function home(req) {
     const response = await api('get', `/search?${req.filters}`)
     state.stats = response.data
     state.filters = req.filters
     state.current_page = 'home'
     render()
-  })
+  }
 
   page('/search', async (req) => {
     const filters = req.filters
-    const page = Number(filters.page)
+    const page = Number(filters.get('page'))
 
     // Pagination
     if(page) {
@@ -317,11 +356,7 @@
     }
 
     const response = await api('GET', `/search?${filters}`)
-
-    // Check if the search has changed or if it's about paginating
-    const data = filters.get('q') == state.filters.get('q')
-      ? state.results.data.concat(response.data.data)
-      : response.data.data
+    const data = response.data.data
 
     // Update state
     Object.assign(state, {
@@ -329,7 +364,7 @@
       stats: response.data,
       results: {
         count: response.data.count,
-        data
+        data: page ? state.results.data.concat(data) : data
       },
       filters
     })
