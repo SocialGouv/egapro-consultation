@@ -39,7 +39,7 @@
   <article id="search">
     <form action="#!/search" class="row">
       <h1>Rechercher l'index de l'égalité professionnelle d'une entreprise de 1000 salariés ou plus</h1>
-      <input type="search" name="q" value="<%= state.filters.q %>" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
+      <input type="search" name="q" value="<%= state.filters.get('q') %>" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
       <button class="button primary">Rechercher</button>
     </form>
   </article>
@@ -52,7 +52,7 @@
       <select name="region" title="Filtrer par région" onchange="submitForm(this.form)">
         <option value="">Région</option>
         <% Object.entries(state.config.REGIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
-        <option value="<%= code %>" selected="<%= state.filters.region == code %>">
+        <option value="<%= code %>" selected="<%= state.filters.get('region') == code %>">
           <%= state.config.REGIONS[code] %>
         </option>
         <% }) %>
@@ -62,11 +62,11 @@
         <option value="">Département</option>
         <% Object.entries(state.config.DEPARTEMENTS)
           .sort((a, b) => a[1].localeCompare(b[1]))
-          .filter(([code, name]) => state.filters.region
-            ? state.config.REGIONS_TO_DEPARTEMENTS[state.filters.region].includes(code)
+          .filter(([code, name]) => state.filters.get('region')
+            ? state.config.REGIONS_TO_DEPARTEMENTS[state.filters.get('region')].includes(code)
             : true)
           .map(([code, name]) => { %>
-          <option value="<%= code %>" selected="<%= state.filters.departement == code %>">
+          <option value="<%= code %>" selected="<%= state.filters.get('departement') == code %>">
             <%= state.config.DEPARTEMENTS[code] %>
           </option>
         <% }) %>
@@ -75,7 +75,7 @@
       <select name="code_naf" title="Filtrer par code NAF" onchange="submitForm(this.form)">
         <option value="">Code NAF</option>
         <% for(code in state.config.NAF){ %>
-          <option value="<%= code %>" selected="<%= state.filters.code_naf == code %>">
+          <option value="<%= code %>" selected="<%= state.filters.get('code_naf') == code %>">
             <%= code %> – <%= state.config.NAF[code] %>
           </option>
         <% } %>
@@ -272,7 +272,6 @@
     })
   }
 
-
   function submitForm(form) {
     const queryParams = new URLSearchParams(new FormData(form))
     const pathname = new URL(form.action).hash
@@ -295,29 +294,29 @@
   // Enable query params for router. This must remain before specific routes.
   page('*', (req, next) => {
     req.query = new URLSearchParams(req.path.split('?')[1])
+    req.filters = new URLSearchParams(Array.from(req.query).filter(pair => pair[1]))
     next()
   })
 
   page('/', async (req) => {
-    const paramsWithValue = new URLSearchParams(Array.from(req.query).filter(pair => pair[1]))
-    const response = await api('get', `/search?${paramsWithValue}`)
+    const response = await api('get', `/search?${req.filters}`)
     state.stats = response.data
-    state.filters = queryFilters(req.query)
+    state.filters = req.filters
     state.current_page = 'home'
     render()
   })
 
   page('/search', async (req) => {
-    // Avoid the API to consider empty values, remove them
-    const page = Number(paramsWithValue.get('page'))
+    const filters = req.filters
+    const page = Number(filters.page)
 
     // Pagination
     if(page) {
-      paramsWithValue.set('offset', page * 10)
-      paramsWithValue.delete('page')
+      filters.set('offset', page * 10)
+      filters.delete('page')
     }
 
-    const response = await api('GET', `/search?${paramsWithValue}`)
+    const response = await api('GET', `/search?${filters}`)
 
     // Update state
     Object.assign(state, {
@@ -327,7 +326,7 @@
         count: response.data.count,
         data: state.results.data.concat(response.data.data)
       },
-      filters: queryFilters(req.query)
+      filters
     })
     render()
   })
