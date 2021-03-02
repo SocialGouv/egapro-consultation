@@ -37,8 +37,8 @@
 
 <main>
   <article id="search">
-    <h1>Rechercher l'index de l'égalité professionnelle d'une entreprise de 1000 salariés ou plus</h1>
     <form action="#!/search" class="row">
+      <h1>Rechercher l'index de l'égalité professionnelle d'une entreprise de 1000 salariés ou plus</h1>
       <input type="search" name="q" value="<%= state.filters.q %>" placeholder="Saisissez le nom ou le SIREN d'une entreprise" autofocus>
       <button class="button primary">Rechercher</button>
     </form>
@@ -46,9 +46,9 @@
 
   <% if (state.current_page == 'home') { %>
   <form action="#!/" id=filter-index>
-    <fieldset>
-      <h1>Index moyen par critères</h1>
+    <h1>Index moyen par critères</h1>
 
+    <fieldset>
       <select name="region" title="Filtrer par région" onchange="submitForm(this.form)">
         <option value="">Région</option>
         <% Object.entries(state.config.REGIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
