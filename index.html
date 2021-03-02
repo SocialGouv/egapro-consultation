@@ -72,11 +72,11 @@
         <% }) %>
       </select>
 
-      <select name="code_naf" title="Filtrer par code NAF" onchange="submitForm(this.form)">
+      <select name="section_naf" title="Filtrer par code NAF" onchange="submitForm(this.form)">
         <option value="">Code NAF</option>
-        <% for(code in state.config.NAF){ %>
-          <option value="<%= code %>" selected="<%= state.filters.get('code_naf') == code %>">
-            <%= code %> – <%= state.config.NAF[code] %>
+        <% for(code in state.config.SECTIONS_NAF){ %>
+          <option value="<%= code %>" selected="<%= state.filters.get('section_naf') == code %>">
+            <%= state.config.SECTIONS_NAF[code] %>
           </option>
         <% } %>
       </select>
