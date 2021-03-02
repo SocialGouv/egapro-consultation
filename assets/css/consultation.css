@@ -163,9 +163,10 @@ form h1 {
   align-items: center;
   width: 100%;
 }
-#search form input {
+#search input {
   width: 100%;
   margin-right: 0;
+  margin: auto 2rem;
 }
 #search form button {
   margin-top: 2rem;
@@ -235,6 +236,9 @@ body > footer p {
   margin: 0;
 }
 
+[name="section_naf"] {
+  text-transform: capitalize;
+}
 
   /* **************** */
  /* Specific content */
@@ -303,9 +307,13 @@ article[name=search] footer {
 
 
 @media (min-width: 900px) {
+  #search input {
+    margin: auto 0;
+  }
   article[name=search] .result h1,
   article[name=search] .result section span {
     font-size: 1.3rem;
+    font-weight: bold;
     text-transform: uppercase;
     margin: 0 0 .2rem 0;
     display: block;
