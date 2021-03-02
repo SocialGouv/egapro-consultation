@@ -168,14 +168,11 @@
         </header>
         <section>
           <p>
-            <span>
-              <% if(record.entreprise.effectif.tranche && record.entreprise.effectif.tranche.includes('1000')) { %>
-                1000 salariés ou plus
-              <% } else { %>
-                  251 à 1000
-              <% } %>
-            </span>
-            salariés
+            <% if(record.entreprise.effectif.tranche && record.entreprise.effectif.tranche.includes('1000')) { %>
+              <span>1000</span> salariés ou plus
+            <% } else { %>
+                <span>251 à 1000</span> salariés
+            <% } %>
           </p>
         </section>
         <% Object.entries(record.notes).sort().reverse().forEach((declaration) => { %>
