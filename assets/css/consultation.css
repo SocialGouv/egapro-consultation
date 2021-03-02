@@ -167,14 +167,14 @@ input {
   margin-top: 2rem;
 }
 
-#search fieldset {
+fieldset {
   flex-basis: 80%;
   border: 0;
   padding: 0;
   margin-top: 3rem;
 }
 
-#search select {
+select {
   border-radius: 3rem;
   padding: .5rem 1rem;
   background-color: transparent;
