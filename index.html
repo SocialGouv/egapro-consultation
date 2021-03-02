@@ -127,7 +127,7 @@
         <header>
           <h1><%= record.entreprise.raison_sociale %></h1>
           <p>SIREN : <%= record.entreprise.siren %></p>
-          <p class=department>Département <%= state.config.DEPARETMENTS %></p>
+          <p class=department>Département : <%= state.config.DEPARTEMENTS[record.entreprise.département] %> (<%= record.entreprise.département %>)</p>
         </header>
         <section>
           <p>
