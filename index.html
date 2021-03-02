@@ -23,11 +23,11 @@
     <a href="https://travail-emploi.gouv.fr/" target="_blank">
       <img src="assets/img/marianne-header.png" alt="Ministère du travail, de l'emploi et de l'insertion. Liberté, égalité, fraternité">
     </a>
-    <a href="#!/">
+    <a href="/home">
       <img src="assets/img/logo.png" alt="Index Égalité Femme/Homme">
     </a>
     <hgroup>
-    <h1><a href="#!/">Index Égalité Professionnelle</a></h1>
+    <h1><a href="/home">Index Égalité Professionnelle</a></h1>
     </hgroup>
     <p hidden>
       <a>Comment l'index est-il calculé ?</a>
@@ -298,13 +298,15 @@
     next()
   })
 
-  page('/', async (req) => {
+  page('/', home)
+  page('/home', home)
+  async function home(req) {
     const response = await api('get', `/search?${req.filters}`)
     state.stats = response.data
     state.filters = req.filters
     state.current_page = 'home'
     render()
-  })
+  }
 
   page('/search', async (req) => {
     const filters = req.filters
