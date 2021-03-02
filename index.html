@@ -87,7 +87,7 @@
     <p>
       <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
     </p>
-    <a href="/search" class="button primary">Voir la liste</a>
+    <a href="#!/search" class="button primary">Voir la liste</a>
   </article>
 
   <article id="download">
@@ -221,7 +221,7 @@
     stats: { count: 0, avg: 0, min: 0, max: 0 },
     results: { count: 0, data: [] },
     config: {},
-    filters: {},
+    filters: new URLSearchParams(),
   }
 
   async function init() {
@@ -318,13 +318,18 @@
 
     const response = await api('GET', `/search?${filters}`)
 
+    // Check if the search has changed or if it's about paginating
+    const data = filters.get('q') == state.filters.get('q')
+      ? state.results.data.concat(response.data.data)
+      : response.data.data
+
     // Update state
     Object.assign(state, {
       current_page: 'search',
       stats: response.data,
       results: {
         count: response.data.count,
-        data: state.results.data.concat(response.data.data)
+        data
       },
       filters
     })
