@@ -273,6 +273,18 @@ article[name=search] {
   padding-top: 3rem;
   text-align: left;
 }
+article[name=search] form {
+  max-width: none;
+  display: flex;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+article[name=search] form p {
+  margin: 0 2rem 0 0;
+}
+article[name=search] form p span {
+  font-weight: bold;
+}
 
 article[name=search] .result {
   border-bottom: 1px solid #ccc;
