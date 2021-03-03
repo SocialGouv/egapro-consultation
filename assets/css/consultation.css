@@ -251,6 +251,7 @@ article#download {
 
 #average {
   padding: 2rem 0;
+  text-align: center;
 }
 #average p {
   font-weight: bold;

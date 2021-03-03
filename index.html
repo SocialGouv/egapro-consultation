@@ -82,50 +82,51 @@
   </article>
 
   <% if (state.current_page == 'home') { %>
-  <form action="#!/" id=filter-index>
-    <h1>Index moyen par critères</h1>
+  <article id="average">
+    <form action="#!/search" id=filter-index>
+      <h1>Index moyen par critères</h1>
 
-    <fieldset>
-      <select name="region" title="Filtrer par région" onchange="submitForm(this.form)">
-        <option value="">Région</option>
-        <% Object.entries(state.config.REGIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
-        <option value="<%= code %>" selected="<%= state.filters.get('region') == code %>">
-          <%= state.config.REGIONS[code] %>
-        </option>
-        <% }) %>
-      </select>
-
-      <select name="departement" title="Filtrer par département" onchange="submitForm(this.form)">
-        <option value="">Département</option>
-        <% Object.entries(state.config.DEPARTEMENTS)
-          .sort((a, b) => a[1].localeCompare(b[1]))
-          .filter(([code, name]) => state.filters.get('region')
-            ? state.config.REGIONS_TO_DEPARTEMENTS[state.filters.get('region')].includes(code)
-            : true)
-          .map(([code, name]) => { %>
-          <option value="<%= code %>" selected="<%= state.filters.get('departement') == code %>">
-            <%= state.config.DEPARTEMENTS[code] %>
+      <fieldset>
+        <select name="region" title="Filtrer par région" onchange="calculateIndex(this.form)">
+          <option value="">Région</option>
+          <% Object.entries(state.config.REGIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
+          <option value="<%= code %>" selected="<%= state.filters.get('region') == code %>">
+            <%= state.config.REGIONS[code] %>
           </option>
-        <% }) %>
-      </select>
+          <% }) %>
+        </select>
 
-      <select name="section_naf" title="Filtrer par code NAF" onchange="submitForm(this.form)">
-        <option value="">Secteur d'activité</option>
-        <% for(code in state.config.SECTIONS_NAF){ %>
-          <option value="<%= code %>" selected="<%= state.filters.get('section_naf') == code %>">
-            <%= state.config.SECTIONS_NAF[code] %>
-          </option>
-        <% } %>
-      </select>
-    </fieldset>
+        <select name="departement" title="Filtrer par département" onchange="calculateIndex(this.form)">
+          <option value="">Département</option>
+          <% Object.entries(state.config.DEPARTEMENTS)
+            .sort((a, b) => a[1].localeCompare(b[1]))
+            .filter(([code, name]) => state.filters.get('region')
+              ? state.config.REGIONS_TO_DEPARTEMENTS[state.filters.get('region')].includes(code)
+              : true)
+            .map(([code, name]) => { %>
+            <option value="<%= code %>" selected="<%= state.filters.get('departement') == code %>">
+              <%= state.config.DEPARTEMENTS[code] %>
+            </option>
+          <% }) %>
+        </select>
+
+        <select name="section_naf" title="Filtrer par code NAF" onchange="calculateIndex(this.form)">
+          <option value="">Secteur d'activité</option>
+          <% for(code in state.config.SECTIONS_NAF){ %>
+            <option value="<%= code %>" selected="<%= state.filters.get('section_naf') == code %>">
+              <%= state.config.SECTIONS_NAF[code] %>
+            </option>
+          <% } %>
+        </select>
+      </fieldset>
+
+      <p>
+        <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
+      </p>
+      <button class="button primary">Voir les entreprises correspondant à ces critères</button>
+    </article>
   </form>
 
-  <article id="average">
-    <p>
-      <span><%= Math.round(state.stats.avg) %></span> Index moyen <%= state.current_year %>
-    </p>
-    <a href="/search" class="button primary">Voir la liste</a>
-  </article>
 
   <article id="download">
     <p>
@@ -171,7 +172,7 @@
             <% if(record.entreprise.effectif.tranche && record.entreprise.effectif.tranche.includes('1000')) { %>
               <span>1000</span> salariés ou plus
             <% } else { %>
-                <span>251 à 1000</span> salariés
+              <span>251 à 1000</span> salariés
             <% } %>
           </p>
         </section>
@@ -306,9 +307,13 @@
     })
   }
 
-  function submitForm(form) {
+  function calculateIndex(form) {
+    submitForm(form, '#!/')
+  }
+
+  function submitForm(form, url) {
     const queryParams = new URLSearchParams(new FormData(form))
-    const pathname = new URL(form.action).hash
+    const pathname = new URL(url || form.action).hash
     page(`${pathname}?${queryParams}`)
   }
 
