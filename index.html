@@ -312,8 +312,18 @@
 
   function submitForm(form, url) {
     const queryParams = new URLSearchParams(new FormData(form))
+    normalizeQueryParams(queryParams)
     const pathname = new URL(url || form.action).hash
     page(`${pathname}?${queryParams}`)
+  }
+
+  function normalizeQueryParams(params) {
+    const region = params.get("region")
+    const departement = params.get("departement")
+    if (region && departement && 
+        !state.config.REGIONS_TO_DEPARTEMENTS[region].includes(departement)) {
+      params.set("departement", "")
+    }
   }
 
   function queryFilters(query) {
