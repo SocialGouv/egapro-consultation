@@ -112,7 +112,6 @@
   <% if (state.current_page == 'search') { %>
   <article name="search">
     <div class="content-wrapper">
-      <% if(state.results.data.length > 0) { %>
       <form action="#!/search">
         <% if(!state.filters.get('q')) { %>
         <p>Filtrer les <span><%= state.results.count %> résultats %></span></p>
@@ -149,10 +148,10 @@
             <% } %>
           </select>
         </fieldset>
-        <% } else { %>
-          <p><%= state.results.count %> résultats %></p>
         <% } %>
       </form>
+      <% if(state.results.data.length > 0) { %>
+        <p><%= state.results.count %> résultats %></p>
       <% } else { %>
         <p id=no-result>Aucun résultat ne correspond à votre recherche. Veuillez adapter votre recherche.</p>
       <% } %>
