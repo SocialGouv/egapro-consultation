@@ -114,6 +114,7 @@
     <div class="content-wrapper">
       <% if(state.results.data.length > 0) { %>
       <form action="#!/search">
+        <% if(!state.filters.get('q')) { %>
         <p>Filtrer les <span><%= state.results.count %> résultats %></span></p>
         <fieldset>
           <select name="region" title="Filtrer par région" onchange="submitForm(this.form)">
@@ -148,6 +149,9 @@
             <% } %>
           </select>
         </fieldset>
+        <% } else { %>
+          <p><%= state.results.count %> résultats %></p>
+        <% } %>
       </form>
       <% } else { %>
         <p id=no-result>Aucun résultat ne correspond à votre recherche. Veuillez adapter votre recherche.</p>
