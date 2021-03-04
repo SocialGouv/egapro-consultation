@@ -120,7 +120,7 @@
           <select name="region" title="Filtrer par région" onchange="submitForm(this.form)">
             <option value="">Région</option>
             <% Object.entries(state.config.REGIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
-            <option value="<%= code %>" selected="<%= state.filters.get('region') == code %>" onchange="submitForm(this.form)">
+            <option value="<%= code %>" selected="<%= state.filters.get('region') == code %>">
               <%= state.config.REGIONS[code] %>
             </option>
             <% }) %>
