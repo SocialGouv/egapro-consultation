@@ -112,8 +112,9 @@
   <% if (state.current_page == 'search') { %>
   <article name="search">
     <div class="content-wrapper">
+      <a href="/home" title="retour à la page d'accueil">&laquo; retour</a>
+      <% if(!state.filters.get('q')) { %>
       <form action="#!/search">
-        <% if(!state.filters.get('q')) { %>
         <p>Filtrer les <span><%= state.results.count %> résultats %></span></p>
         <fieldset>
           <select name="region" title="Filtrer par région" onchange="submitForm(this.form)">
@@ -148,8 +149,8 @@
             <% } %>
           </select>
         </fieldset>
-        <% } %>
       </form>
+      <% } %>
       <% if(state.results.data.length > 0) { %>
         <p><%= state.results.count %> résultats %></p>
       <% } else { %>

@@ -269,11 +269,16 @@ article[name=search] {
   padding-top: 3rem;
   text-align: left;
 }
+article[name=search] a {
+  color: #444;
+  text-decoration: none;
+}
 article[name=search] form {
   max-width: none;
   display: flex;
   align-items: center;
   margin-bottom: 3rem;
+  margin-top: 1rem;
 }
 article[name=search] form p {
   margin: 0 2rem 0 0;
