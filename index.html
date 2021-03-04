@@ -177,7 +177,7 @@
         <% Object.entries(record.notes).sort().reverse().forEach((declaration) => { %>
           <section>
             <p>
-              <span><%= declaration[1] %></span>
+              <span><% if (declaration[1] == null) { %><abbr title="Non calculable">NC</abbr><% } else { %><%= declaration[1] %><% } %></span>
               Index <%= Number(declaration[0]) + 1 %>
             </p>
           </section>
