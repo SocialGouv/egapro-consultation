@@ -306,7 +306,9 @@
   }
 
   function calculateIndex(form) {
-    submitForm(form, '#!/')
+    const next = location
+    next.hash = "#!/home"
+    submitForm(form, next)
   }
 
   function submitForm(form, url) {
