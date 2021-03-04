@@ -112,14 +112,15 @@
   <% if (state.current_page == 'search') { %>
   <article name="search">
     <div class="content-wrapper">
-      <% if(state.results.data.length > 0) { %>
+      <a href="/home" title="retour à la page d'accueil">&laquo; retour</a>
+      <% if(!state.filters.get('q')) { %>
       <form action="#!/search">
         <p>Filtrer les <span><%= state.results.count %> résultats %></span></p>
         <fieldset>
           <select name="region" title="Filtrer par région" onchange="submitForm(this.form)">
             <option value="">Région</option>
             <% Object.entries(state.config.REGIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => { %>
-            <option value="<%= code %>" selected="<%= state.filters.get('region') == code %>" onchange="submitForm(this.form)">
+            <option value="<%= code %>" selected="<%= state.filters.get('region') == code %>">
               <%= state.config.REGIONS[code] %>
             </option>
             <% }) %>
@@ -149,6 +150,9 @@
           </select>
         </fieldset>
       </form>
+      <% } %>
+      <% if(state.results.data.length > 0) { %>
+        <p><%= state.results.count %> résultats %></p>
       <% } else { %>
         <p id=no-result>Aucun résultat ne correspond à votre recherche. Veuillez adapter votre recherche.</p>
       <% } %>
@@ -173,7 +177,7 @@
         <% Object.entries(record.notes).sort().reverse().forEach((declaration) => { %>
           <section>
             <p>
-              <span><%= declaration[1] %></span>
+              <span><% if (declaration[1] == null) { %><abbr title="Non calculable">NC</abbr><% } else { %><%= declaration[1] %><% } %></span>
               Index <%= Number(declaration[0]) + 1 %>
             </p>
           </section>
@@ -302,13 +306,25 @@
   }
 
   function calculateIndex(form) {
-    submitForm(form, '#!/')
+    const next = location
+    next.hash = "#!/home"
+    submitForm(form, next)
   }
 
   function submitForm(form, url) {
     const queryParams = new URLSearchParams(new FormData(form))
+    normalizeQueryParams(queryParams)
     const pathname = new URL(url || form.action).hash
     page(`${pathname}?${queryParams}`)
+  }
+
+  function normalizeQueryParams(params) {
+    const region = params.get("region")
+    const departement = params.get("departement")
+    if (region && departement && 
+        !state.config.REGIONS_TO_DEPARTEMENTS[region].includes(departement)) {
+      params.set("departement", "")
+    }
   }
 
   function queryFilters(query) {
