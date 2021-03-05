@@ -152,7 +152,7 @@
       </form>
       <% } %>
       <% if(state.results.data.length > 0) { %>
-        <p><%= state.results.count %> résultats %></p>
+        <p><%= state.results.data.length %> sur <%= state.results.count %> résultats %></p>
       <% } else { %>
         <p id=no-result>Aucun résultat ne correspond à votre recherche. Veuillez adapter votre recherche.</p>
       <% } %>
