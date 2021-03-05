@@ -78,6 +78,7 @@ body > header {
   width: 100%;
   top: 0;
   left: 0;
+  z-index: 10;
 }
 body > header > div {
   margin: auto;
@@ -189,11 +190,16 @@ body .overlay {
   width: 100%;
   height: 100%;
   background: white;
-  z-index: 10;
+  z-index: 100;
   text-align: center;
 }
 body.ready .overlay {
   display: none;
+}
+body.ready.loading button,
+body.ready.loading select,
+body.ready.loading .navigation {
+  opacity: 0.5;
 }
 body > footer {
   border-top: #eee solid 1px;

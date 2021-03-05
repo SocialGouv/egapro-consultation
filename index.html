@@ -122,7 +122,7 @@
   <% if (state.current_page == 'search') { %>
   <article name="search">
     <div class="content-wrapper">
-      <a href="/home" title="retour à la page d'accueil">&laquo; retour</a>
+      <a href="/home" title="retour à la page d'accueil" class="navigation" onclick="setLoading(true)">&laquo; retour</a>
       <% if(!state.filters.get('q')) { %>
       <form action="#!/search">
         <p>Filtrer les <span><%= state.results.count %> résultats %></span></p>

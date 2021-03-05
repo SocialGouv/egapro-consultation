@@ -74,6 +74,7 @@ function calculateIndex(form) {
 }
 
 function submitForm(form, url) {
+  setLoading(true)
   const queryParams = new URLSearchParams(new FormData(form))
   normalizeQueryParams(queryParams)
   const pathname = new URL(url || form.action).hash
@@ -117,6 +118,7 @@ async function home(req) {
   state.filters = req.filters
   state.current_page = 'home'
   render()
+  setLoading(false)
 }
 
 page('/search', async (req) => {
@@ -143,6 +145,7 @@ page('/search', async (req) => {
     filters
   })
   render()
+  setLoading(false)
 })
 
 page('*', () => {
@@ -151,9 +154,18 @@ page('*', () => {
 })
 
 function moreResults() {
+  setLoading(true)
   const queryParams = new URLSearchParams(page.current.split('?')[1])
   queryParams.set('page', Number(queryParams.get('page') || 1) + 1)
   page.redirect(`/search?${queryParams}`)
+}
+
+function setLoading(loading) {
+  if (loading) {
+    if (!document.body.classList.contains('loading')) document.body.classList.add('loading')
+  } else {
+    if (document.body.classList.contains('loading')) document.body.classList.remove('loading')
+  }
 }
 
 init()
