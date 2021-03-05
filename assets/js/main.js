@@ -17,6 +17,7 @@ const state = {
   results: { count: 0, data: [] },
   config: {},
   filters: new URLSearchParams(),
+  offset: 0,
 }
 
 async function init() {
@@ -75,6 +76,7 @@ function calculateIndex(form) {
 
 function submitForm(form, url) {
   setLoading(true)
+  state.offset = 0
   const queryParams = new URLSearchParams(new FormData(form))
   normalizeQueryParams(queryParams)
   const pathname = new URL(url || form.action).hash
@@ -123,12 +125,10 @@ async function home(req) {
 
 page('/search', async (req) => {
   const filters = req.filters
-  const page = Number(filters.get('page'))
 
   // Pagination
-  if(page) {
-    filters.set('offset', page * 10)
-    filters.delete('page')
+  if(state.offset) {
+    filters.set('offset', state.offset)
   }
 
   const response = await api('GET', `/search?${filters}`)
@@ -140,7 +140,7 @@ page('/search', async (req) => {
     stats: response.data,
     results: {
       count: response.data.count,
-      data: page ? state.results.data.concat(data) : data
+      data: state.offset ? state.results.data.concat(data) : data
     },
     filters
   })
@@ -155,8 +155,8 @@ page('*', () => {
 
 function moreResults() {
   setLoading(true)
+  state.offset += 10
   const queryParams = new URLSearchParams(page.current.split('?')[1])
-  queryParams.set('page', Number(queryParams.get('page') || 1) + 1)
   page.redirect(`/search?${queryParams}`)
 }
 
