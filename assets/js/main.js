@@ -68,9 +68,9 @@ function render() {
 }
 
 function calculateIndex(form) {
-  const next = location
+  const next = new URL(location)
   next.hash = "#!/home"
-  submitForm(form, next)
+  submitForm(form, next.toString())
 }
 
 function submitForm(form, url) {
