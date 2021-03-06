@@ -77,10 +77,21 @@ function calculateIndex(form) {
 function submitForm(form, url) {
   setLoading(true)
   state.offset = 0
-  const queryParams = new URLSearchParams(new FormData(form))
+  const queryParams = formToURLSearchParams(form)
   normalizeQueryParams(queryParams)
   const pathname = new URL(url || form.action).hash
   page(`${pathname}?${queryParams}`)
+}
+
+function formToURLSearchParams(form) {
+  // We don't use `const queryParams = new URLSearchParams(new FormData(form))`
+  // because EdgeHTML can't cope with it
+  const formData = new FormData(form)
+  const filters = {}
+  Array.from(formData.entries()).forEach(([key, value]) => {
+    filters[key] = value
+  })
+  return new URLSearchParams(filters)
 }
 
 function normalizeQueryParams(params) {
