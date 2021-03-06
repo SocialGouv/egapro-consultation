@@ -8,10 +8,9 @@
   // First, check the browser is compatible
   try {
     eval('new URLSearchParams("foo=bar")');
+    eval("async function _(){}")
   } catch (e) {
-    if (!window.location.href.endsWith('/compatibilite.html')) {
       window.location.href = 'https://index-egapro.travail.gouv.fr/declaration/compatibilite.html';
-    }
   }
 </script>
 <script
