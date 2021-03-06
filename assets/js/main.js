@@ -88,8 +88,8 @@ function formToURLSearchParams(form) {
   // because EdgeHTML can't cope with it
   const formData = new FormData(form)
   const filters = {}
-  Array.from(formData.entries()).forEach(([key, value]) => {
-    filters[key] = value
+  Array.from(formData.keys()).forEach(key => {
+    filters[key] = formData.get(key)
   })
   return new URLSearchParams(filters)
 }
