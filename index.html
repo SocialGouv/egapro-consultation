@@ -8,6 +8,7 @@
   // First, check the browser is compatible
   try {
     eval("async function _(){}")
+    eval("new FormData().entries()")
   } catch (e) {
       window.location.href = 'https://index-egapro.travail.gouv.fr/declaration/compatibilite.html';
   }
