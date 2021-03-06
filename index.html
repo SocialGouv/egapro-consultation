@@ -4,6 +4,16 @@
 <meta charset="utf-8">
 <title>L'index d'égalité dans les entreprises - Ministère du Travail</title>
 <link rel="stylesheet" href="assets/css/consultation.css">
+<script>
+  // First, check the browser is compatible
+  try {
+    eval('new URLSearchParams("foo=bar")');
+  } catch (e) {
+    if (!window.location.href.endsWith('/compatibilite.html')) {
+      window.location.href = 'https://index-egapro.travail.gouv.fr/declaration/compatibilite.html';
+    }
+  }
+</script>
 <script
   src="assets/js/sentry.min.js"
   integrity="sha384-ir4+BihBClNpjZk3UKgHTr0cwRhujAjy/M5VEGvcOzjhM1Db79GAg9xLxYn4uVK4"
@@ -13,7 +23,7 @@
   if (typeof Sentry !== "undefined") {
     Sentry.init({
       dsn: 'https://c98522783c284ae1ada779bc05a57a96@sentry.fabrique.social.gouv.fr/51',
-      release: '2021.03.05'
+      release: '2021.03.06'
     })
   }
 </script>
@@ -30,14 +40,14 @@
 
 <header>
   <div class=content-wrapper>
-    <a href="https://travail-emploi.gouv.fr/" target="_blank">
+    <a href="https://travail-emploi.gouv.fr/droit-du-travail/egalite-professionnelle-discrimination-et-harcelement/indexegapro" target="_blank">
       <img src="assets/img/marianne-header.png" alt="Ministère du travail, de l'emploi et de l'insertion. Liberté, égalité, fraternité">
     </a>
     <a href="/home">
       <img src="assets/img/logo.png" alt="Index Égalité Femme/Homme">
     </a>
     <hgroup>
-    <h1><a href="/home">Index Égalité Professionnelle</a></h1>
+    <h1><a href="https://index-egapro.travail.gouv.fr/">Index Égalité Professionnelle</a></h1>
     </hgroup>
     <p hidden>
       <a>Comment l'index est-il calculé ?</a>
@@ -224,7 +234,7 @@
   <div class="content-wrapper">
     <section>
       <header>
-        <a href="https://travail-emploi.gouv.fr/" target="_blank">
+        <a href="https://travail-emploi.gouv.fr/droit-du-travail/egalite-professionnelle-discrimination-et-harcelement/indexegapro" target="_blank">
           <img src="assets/img/marianne-footer.png" alt="Ministère du travail, de l'emploi et de l'insertion. Liberté, égalité, fraternité">
         </a>
       </header>
@@ -236,7 +246,7 @@
     </section>
     <nav>
       <a href="https://voxusagers.numerique.gouv.fr/Demarches/2240?&amp;view-mode=formulaire-avis&amp;nd_mode=en-ligne-enti%C3%A8rement&amp;nd_source=button&amp;key=73366ddb13d498f4c77d01c2983bab48" target="_blank" rel="noopener noreferrer">Donnez-nous votre avis</a>
-      <a href="https://github.com/SocialGouv/egapro-consultation/tree/2021.03.05" target="_blank" rel="noopener noreferrer">Contribuez sur Github</a>
+      <a href="https://github.com/SocialGouv/egapro-consultation/tree/2021.03.06" target="_blank" rel="noopener noreferrer">Contribuez sur Github</a>
       <a href="mailto:index@travail.gouv.fr?subject=À propos du site de consultation">Contact</a>
     </nav>
   </div>

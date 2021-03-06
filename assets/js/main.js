@@ -118,6 +118,12 @@ async function home(req) {
   const response = await api('get', `/search?${req.filters}`)
   state.stats = response.data
   state.filters = req.filters
+
+  // If we just landed on the home page, make sure it's scrolled back to the top
+  if (state.current_page !== 'home') {
+    document.getElementsByTagName("html")[0].scrollTop = 0
+  }
+
   state.current_page = 'home'
   render()
   setLoading(false)
@@ -133,6 +139,11 @@ page('/search', async (req) => {
 
   const response = await api('GET', `/search?${filters}`)
   const data = response.data.data
+
+  // If we just landed on the search page, make sure it's scrolled back to the top
+  if (state.current_page !== 'search') {
+    document.getElementsByTagName("html")[0].scrollTop = 0
+  }
 
   // Update state
   Object.assign(state, {
