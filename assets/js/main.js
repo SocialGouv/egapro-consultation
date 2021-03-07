@@ -12,7 +12,7 @@ function api(method, uri) {
 
 const state = {
   csv_update: undefined,
-  current_year: (new Date()).getFullYear() - 1,
+  current_year: (new Date()).getFullYear(),
   stats: { count: 0, avg: 0, min: 0, max: 0 },
   results: { count: 0, data: [] },
   config: {},
