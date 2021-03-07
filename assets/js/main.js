@@ -17,6 +17,7 @@ const state = {
   results: { count: 0, data: [] },
   config: {},
   filters: new URLSearchParams(),
+  offset: 0,
 }
 
 async function init() {
@@ -68,16 +69,29 @@ function render() {
 }
 
 function calculateIndex(form) {
-  const next = location
+  const next = new URL(location)
   next.hash = "#!/home"
-  submitForm(form, next)
+  submitForm(form, next.toString())
 }
 
 function submitForm(form, url) {
-  const queryParams = new URLSearchParams(new FormData(form))
+  setLoading(true)
+  state.offset = 0
+  const queryParams = formToURLSearchParams(form)
   normalizeQueryParams(queryParams)
   const pathname = new URL(url || form.action).hash
   page(`${pathname}?${queryParams}`)
+}
+
+function formToURLSearchParams(form) {
+  // We don't use `const queryParams = new URLSearchParams(new FormData(form))`
+  // because EdgeHTML can't cope with it
+  const formData = new FormData(form)
+  const filters = {}
+  Array.from(formData).forEach(([key, value]) => {
+    filters[key] = value
+  })
+  return new URLSearchParams(filters)
 }
 
 function normalizeQueryParams(params) {
@@ -115,22 +129,32 @@ async function home(req) {
   const response = await api('get', `/search?${req.filters}`)
   state.stats = response.data
   state.filters = req.filters
+
+  // If we just landed on the home page, make sure it's scrolled back to the top
+  if (state.current_page !== 'home') {
+    document.getElementsByTagName("html")[0].scrollTop = 0
+  }
+
   state.current_page = 'home'
   render()
+  setLoading(false)
 }
 
 page('/search', async (req) => {
   const filters = req.filters
-  const page = Number(filters.get('page'))
 
   // Pagination
-  if(page) {
-    filters.set('offset', page * 10)
-    filters.delete('page')
+  if(state.offset) {
+    filters.set('offset', state.offset)
   }
 
   const response = await api('GET', `/search?${filters}`)
   const data = response.data.data
+
+  // If we just landed on the search page, make sure it's scrolled back to the top
+  if (state.current_page !== 'search') {
+    document.getElementsByTagName("html")[0].scrollTop = 0
+  }
 
   // Update state
   Object.assign(state, {
@@ -138,11 +162,12 @@ page('/search', async (req) => {
     stats: response.data,
     results: {
       count: response.data.count,
-      data: page ? state.results.data.concat(data) : data
+      data: state.offset ? state.results.data.concat(data) : data
     },
     filters
   })
   render()
+  setLoading(false)
 })
 
 page('*', () => {
@@ -151,9 +176,18 @@ page('*', () => {
 })
 
 function moreResults() {
+  setLoading(true)
+  state.offset += 10
   const queryParams = new URLSearchParams(page.current.split('?')[1])
-  queryParams.set('page', Number(queryParams.get('page') || 1) + 1)
   page.redirect(`/search?${queryParams}`)
+}
+
+function setLoading(loading) {
+  if (loading) {
+    if (!document.body.classList.contains('loading')) document.body.classList.add('loading')
+  } else {
+    if (document.body.classList.contains('loading')) document.body.classList.remove('loading')
+  }
 }
 
 init()
