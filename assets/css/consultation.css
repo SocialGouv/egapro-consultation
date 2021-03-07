@@ -343,6 +343,7 @@ article[name=search] footer {
   article[name=search] .result > section {
     text-transform: uppercase;
     text-align: center;
+    width: 15%;
   }
   article[name=search] .result > *:first-child {
     padding-left: 0;
