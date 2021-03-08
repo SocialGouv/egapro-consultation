@@ -127,8 +127,13 @@ page('*', (req, next) => {
 page('/', home)
 page('/home', home)
 async function home(req) {
-  // const response = await api('get', `/search?${req.filters}`)
-  const response = await request('get', './cache/search.json')
+  // TODO: temporary fix for perf reasons
+  let response
+  if (Array.from(req.filters).length === 0) {
+    response = await request('get', './cache/search.json')
+  } else {
+    response = await api('get', `/search?${req.filters}`)
+  }
   state.stats = response.data
   state.filters = req.filters
 
@@ -150,7 +155,13 @@ page('/search', async (req) => {
     filters.set('offset', state.offset)
   }
 
-  const response = await api('GET', `/search?${filters}`)
+  // TODO: temporary fix for perf reasons
+  let response
+  if (Array.from(filters).length === 0) {
+    response = await request('get', './cache/search.json')
+  } else {
+    response = await api('GET', `/search?${filters}`)
+  }
   const data = response.data.data
 
   // If we just landed on the search page, make sure it's scrolled back to the top
