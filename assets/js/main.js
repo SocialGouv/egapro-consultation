@@ -1,5 +1,5 @@
 const config = {
-  apiUrl: 'https://dev.egapro.fabrique.social.gouv.fr/api'
+  apiUrl: 'https://index-egapro.travail.gouv.fr/api'
 }
 
 function api(method, uri) {
