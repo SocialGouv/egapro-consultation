@@ -116,13 +116,14 @@
     <p>
       Vous souhaitez consulter les données de toutes les entreprises ?
       <br>
-      Téléchargez le fichier recensant toutes les déclarations <span id="csv-date">
-        <% if (state.csv_update) { %>
-          au <%= state.csv_update %>
-        <% } else { %>
-          actuelles
-        <% } %>
-        <span> au format tableur (.csv) :
+      Téléchargez le fichier recensant toutes les notes de l’Index pour les entreprises de plus de 250 salariés
+      <span id="csv-date">
+      <% if (state.csv_update) { %>
+        au <%= state.csv_update %>
+      <% } else { %>
+        actuelles
+      <% } %>
+      <span> au format tableur (.csv) :
     </p>
     <a class="button" href="/index-egalite-fh.csv" download>⤓ Télécharger</a>
   </article>
