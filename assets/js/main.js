@@ -126,7 +126,8 @@ page('*', (req, next) => {
 page('/', home)
 page('/home', home)
 async function home(req) {
-  const response = await api('get', `/search?${req.filters}`)
+  // const response = await api('get', `/search?${req.filters}`)
+  const response = await request('get', './cache/search.json')
   state.stats = response.data
   state.filters = req.filters
 
