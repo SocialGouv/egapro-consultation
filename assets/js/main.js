@@ -29,8 +29,7 @@ async function init() {
   const responseConfig = await api('get', "/config")
   state.config = responseConfig.data
 
-  // Start page router
-  page({ hashbang: true })
+  router.init()
 }
 
 ////////////////
@@ -72,7 +71,7 @@ function render() {
 
 function calculateIndex(form) {
   const next = new URL(location)
-  next.hash = "#!/home"
+  next.hash = "#!/"
   submitForm(form, next.toString())
 }
 
@@ -82,7 +81,7 @@ function submitForm(form, url) {
   const queryParams = formToURLSearchParams(form)
   normalizeQueryParams(queryParams)
   const pathname = new URL(url || form.action).hash
-  page(`${pathname}?${queryParams}`)
+  router.redirect(`${pathname}?${queryParams}`)
 }
 
 function formToURLSearchParams(form) {
@@ -118,17 +117,39 @@ function queryFilters(query) {
 /* Controllers */
 /////////////////
 
-// Enable query params for router. This must remain before specific routes.
-page('*', (req, next) => {
-  req.query = new URLSearchParams(req.path.split('?')[1])
-  req.filters = new URLSearchParams(Array.from(req.query).filter(pair => pair[1]))
-  next()
-})
+const router = {
+  routes: {},
 
-page('/', home)
-page('/home', home)
-async function home(req) {
-  // TODO: temporary fix for perf reasons
+  add(name, cb) {
+    this.routes[name] = cb
+  },
+
+  call(name, request) {
+    if(!Object.keys(this.routes).includes(name)) name = '404'
+    return this.routes[name](request)
+  },
+
+  redirect(uri) {
+    if(!uri.startsWith('#!')) uri = `#!${uri}`
+    location.hash = uri
+  },
+
+  init(defaultRoute) {
+    window.addEventListener('hashchange', (event) => {
+      const newUrl = new URL(event.newURL ? event.newURL : location.href)
+      const url = new URL(`http://_${newUrl.hash.replace('#!', '')}`)
+      const request = {
+        url,
+        filters: new URLSearchParams(queryFilters(url.searchParams))
+      }
+      router.call(url.pathname, request)
+    })
+    window.dispatchEvent(new Event('hashchange'))
+  }
+}
+
+
+router.add('/', async function home(req) {
   const response = await api('get', `/stats?${req.filters}`)
   state.stats = response.data
   state.filters = req.filters
@@ -141,9 +162,10 @@ async function home(req) {
   state.current_page = 'home'
   render()
   setLoading(false)
-}
+})
 
-page('/search', async (req) => {
+
+router.add('/search', async (req) => {
   const filters = req.filters
 
   // Pagination
@@ -173,16 +195,22 @@ page('/search', async (req) => {
   setLoading(false)
 })
 
-page('*', () => {
+
+router.add('404', () => {
+  console.error('this page does not exist')
+})
+
+
+router.add('404', () => {
   state.current_page = '404'
   render()
 })
 
+
 function moreResults() {
   setLoading(true)
   state.offset += 10
-  const queryParams = new URLSearchParams(page.current.split('?')[1])
-  page.redirect(`/search?${queryParams}`)
+  render()
 }
 
 function setLoading(loading) {
