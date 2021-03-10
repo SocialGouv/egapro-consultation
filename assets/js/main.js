@@ -1,5 +1,7 @@
 const config = {
-  apiUrl: 'https://index-egapro.travail.gouv.fr/api'
+  apiUrl: location.hostname === 'index-egapro.travail.gouv.fr'
+    ? 'https://index-egapro.travail.gouv.fr/api'
+    : 'https://dev.egapro.fabrique.social.gouv.fr/api'
 }
 
 function api(method, uri) {
@@ -128,12 +130,9 @@ page('/', home)
 page('/home', home)
 async function home(req) {
   // TODO: temporary fix for perf reasons
-  let response
-  if (Array.from(req.filters).length === 0) {
-    response = await request('get', './cache/search.json')
-  } else {
-    response = await api('get', `/search?${req.filters}`)
-  }
+  const response = Array.from(req.filters).length === 0
+    ? await request('get', './cache/search.json')
+    : await api('get', `/search?${req.filters}`)
   state.stats = response.data
   state.filters = req.filters
 
