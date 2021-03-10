@@ -1,5 +1,7 @@
 const config = {
-  apiUrl: 'https://index-egapro.travail.gouv.fr/api'
+  apiUrl: location.hostname === 'index-egapro.travail.gouv.fr'
+    ? 'https://index-egapro.travail.gouv.fr/api'
+    : 'https://dev.egapro.fabrique.social.gouv.fr/api'
 }
 
 function api(method, uri) {
@@ -24,8 +26,7 @@ async function init() {
   const responseCsv = await request('head', "/index-egalite-fh.csv")
   const lastModified = new Date(responseCsv.headers.get('last-modified'))
   state.csv_update = lastModified.toLocaleDateString()
-  // const responseConfig = await api('get', "/config")
-  const responseConfig = await request('get', "./cache/config.json")
+  const responseConfig = await api('get', "/config")
   state.config = responseConfig.data
 
   // Start page router
@@ -128,12 +129,7 @@ page('/', home)
 page('/home', home)
 async function home(req) {
   // TODO: temporary fix for perf reasons
-  let response
-  if (Array.from(req.filters).length === 0) {
-    response = await request('get', './cache/search.json')
-  } else {
-    response = await api('get', `/search?${req.filters}`)
-  }
+  const response = await api('get', `/stats?${req.filters}`)
   state.stats = response.data
   state.filters = req.filters
 
@@ -155,13 +151,7 @@ page('/search', async (req) => {
     filters.set('offset', state.offset)
   }
 
-  // TODO: temporary fix for perf reasons
-  let response
-  if (Array.from(filters).length === 0) {
-    response = await request('get', './cache/search.json')
-  } else {
-    response = await api('GET', `/search?${filters}`)
-  }
+  const response = await api('GET', `/search?${filters}`)
   const data = response.data.data
 
   // If we just landed on the search page, make sure it's scrolled back to the top
