@@ -26,8 +26,7 @@ async function init() {
   const responseCsv = await request('head', "/index-egalite-fh.csv")
   const lastModified = new Date(responseCsv.headers.get('last-modified'))
   state.csv_update = lastModified.toLocaleDateString()
-  // const responseConfig = await api('get', "/config")
-  const responseConfig = await request('get', "./cache/config.json")
+  const responseConfig = await api('get', "/config")
   state.config = responseConfig.data
 
   // Start page router
