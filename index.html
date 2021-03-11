@@ -22,7 +22,7 @@
   if (typeof Sentry !== "undefined") {
     Sentry.init({
       dsn: 'https://c98522783c284ae1ada779bc05a57a96@sentry.fabrique.social.gouv.fr/51',
-      release: '2021.03.10'
+      release: '2021.03.11'
     })
   }
 </script>
@@ -181,7 +181,7 @@
 
       <article class=result>
         <header>
-          <h1><%= record.entreprise.raison_sociale %></h1>
+          <h1><%= record.label %></h1>
           <p>SIREN : <%= record.entreprise.siren %></p>
           <p class=department>Département : <%= state.config.DEPARTEMENTS[record.entreprise.département] %> (<%= record.entreprise.département %>)</p>
         </header>
@@ -246,7 +246,7 @@
     </section>
     <nav>
       <a href="https://voxusagers.numerique.gouv.fr/Demarches/2240?&amp;view-mode=formulaire-avis&amp;nd_mode=en-ligne-enti%C3%A8rement&amp;nd_source=button&amp;key=73366ddb13d498f4c77d01c2983bab48" target="_blank" rel="noopener noreferrer">Donnez-nous votre avis</a>
-      <a href="https://github.com/SocialGouv/egapro-consultation/tree/2021.03.10" target="_blank" rel="noopener noreferrer">Contribuez sur Github</a>
+      <a href="https://github.com/SocialGouv/egapro-consultation/tree/2021.03.11" target="_blank" rel="noopener noreferrer">Contribuez sur Github</a>
       <a href="mailto:index@travail.gouv.fr?subject=À propos du site de consultation">Contact</a>
     </nav>
   </div>
