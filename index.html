@@ -42,7 +42,7 @@
     <a href="https://travail-emploi.gouv.fr/droit-du-travail/egalite-professionnelle-discrimination-et-harcelement/indexegapro" target="_blank">
       <img src="assets/img/marianne-header.png" alt="Ministère du travail, de l'emploi et de l'insertion. Liberté, égalité, fraternité">
     </a>
-    <a href="/home">
+    <a href="#!/">
       <img src="assets/img/logo.png" alt="Index Égalité Femme/Homme">
     </a>
     <hgroup>
@@ -132,7 +132,7 @@
   <% if (state.current_page == 'search') { %>
   <article name="search">
     <div class="content-wrapper">
-      <a href="/home" title="retour à la page d'accueil" class="navigation" onclick="setLoading(true)">&laquo; retour</a>
+      <a href="#!/" title="retour à la page d'accueil" class="navigation" onclick="setLoading(true)">&laquo; retour</a>
       <% if(!state.filters.get('q')) { %>
       <form action="#!/search">
         <p>Filtrer les <span><%= state.results.count %> résultats %></span></p>
@@ -252,7 +252,6 @@
   </div>
 </footer>
 
-<script src="assets/js/page.js"></script>
 <script src="assets/js/ejs.js"></script>
 <script src="assets/js/utils.js"></script>
 <script src="assets/js/main.js"></script>
