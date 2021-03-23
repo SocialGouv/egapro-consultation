@@ -28,6 +28,11 @@ async function init() {
   state.csv_update = lastModified.toLocaleDateString()
   const responseConfig = await api('get', "/config")
   state.config = responseConfig.data
+  const nafs = state.config.SECTIONS_NAF
+  for (code in nafs) {
+    const label = nafs[code]
+    state.config.SECTIONS_NAF[code] = label[0] + label.slice(1).toLowerCase()
+  }
 
   // Start page router
   page({ hashbang: true })
