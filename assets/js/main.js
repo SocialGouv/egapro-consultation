@@ -25,7 +25,7 @@ const state = {
 async function init() {
   const responseCsv = await request('head', "/index-egalite-fh.csv")
   const lastModified = new Date(responseCsv.headers.get('last-modified'))
-  state.csv_update = lastModified.toLocaleDateString()
+  state.csv_update = `${lastModified.getDate()}/${lastModified.getMonth() + 1}/${lastModified.getFullYear()}`
   const responseConfig = await api('get', "/config")
   state.config = responseConfig.data
   const nafs = state.config.SECTIONS_NAF
