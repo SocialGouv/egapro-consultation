@@ -133,7 +133,6 @@ page('*', (req, next) => {
 page('/', home)
 page('/home', home)
 async function home(req) {
-  // TODO: temporary fix for perf reasons
   const response = await api('get', `/stats?${req.filters}`)
   state.stats = response.data
   state.filters = req.filters
