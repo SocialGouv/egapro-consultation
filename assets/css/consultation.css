@@ -354,6 +354,12 @@ article[name=search] footer {
   article[name=search] .result p {
     margin: 0 0 .3rem 0;
   }
+  article[name="search"] .result p span.small {
+    color: #555;
+    font-weight: lighter;
+    font-size: 0.9rem;
+    text-transform: lowercase;
+  }
   article[name=search] .result > header,
   article[name=search] .result > section {
     border-right: 1px solid #777;
