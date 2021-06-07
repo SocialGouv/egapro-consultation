@@ -199,6 +199,7 @@
             <p>
               <span><% if (declaration[1] == null) { %><abbr title="Non calculable">NC</abbr><% } else { %><%= declaration[1] %><% } %></span>
               Index <%= Number(declaration[0]) + 1 %>
+              <span class="small">(données <%= declaration[0] %>)</span>
             </p>
           </section>
         <% }) %>
