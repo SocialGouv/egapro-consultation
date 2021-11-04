@@ -20,4 +20,6 @@ gmake release-prod
 Cela va créer un tag qui contiendra le code se trouvant sur le répertoire à ce moment-là.
 
 Note :
-- il va mettre à jour une branch distante deploy
+- il va mettre à jour une branche distante deploy
+- il va créer 2 tags (nom-du-jour et nom-du-jour-published) contenant le code source
+
