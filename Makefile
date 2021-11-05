@@ -10,9 +10,10 @@ build:
 
 release: build
 	git worktree add -b deploy deploying/ origin/deploy
-	rm -rf deploying/*
-	cp -r build/* deploying/
 	- cd deploying/ && \
+		git rm -rf . && \
+		git clean -fxd && \
+		cp -r ../build/* ./ && \
 		git add . && \
 		git commit -am "Publishing" && \
 		git push
@@ -20,5 +21,6 @@ release: build
 	git branch -d deploy
 
 release-prod: release
+	git tag -f `date +"%Y.%m.%d"`-published
 	git tag -f `date +"%Y.%m.%d"` origin/deploy
 	git push --tags -f
