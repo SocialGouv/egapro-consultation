@@ -312,7 +312,7 @@ article[name=search] .result {
   border-bottom: 1px solid #ccc;
 }
 
-article[name=search] .department {
+article .subtitle {
   font-weight: lighter;
   color: #555;
   font-size: .9rem;
