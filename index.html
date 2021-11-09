@@ -181,7 +181,7 @@
 
       <article class=result>
         <header>
-          <h1 style="display: flex; align-items: center;"><%= record.label %> <% if (record.entreprise.ues) { %> <img src="assets/img/office-building.svg" style="margin-left: 10px; width: 20px" alt="Regroupement UES" title="UES (Unité Économique et Sociale)"><% } %></h1>
+          <h1 style="display: flex; align-items: flex-start;"><%= record.label %> <% if (record.entreprise.ues) { %>&nbsp;<span class="pill" title="UES (Unité Économique et Sociale)"><img src="assets/img/office-building.svg" style="margin-left: 10px; width: 20px; stroke: #d1fae5" alt="Regroupement UES">&nbsp;UES</span><% } %></h1>
           <% if(record.entreprise.ues) { %>
             <p>Entreprise déclarante de l'UES</p>
             <% } %>

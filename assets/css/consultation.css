@@ -340,6 +340,18 @@ article[name=search] footer {
   text-align: center;
 }
 
+.pill {
+  background-color: #d1fae5;
+  border: 0 solid #e5e7eb;
+  border-radius: 10px;
+  border-spacing: 2px;
+  box-sizing: border-box;
+  color: #065f46;
+  cursor: pointer;
+  display: inline-flex;
+  padding-right: .5rem;
+}
+
 
 @media (min-width: 900px) {
   #search input {
