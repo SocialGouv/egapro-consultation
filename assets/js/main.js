@@ -28,6 +28,8 @@ async function init() {
   state.csv_update = `${lastModified.getDate()}/${lastModified.getMonth() + 1}/${lastModified.getFullYear()}`
   const responseConfig = await api('get', "/config")
   state.config = responseConfig.data
+  const availableYears = state.config.YEARS && state.config.YEARS.length ? state.config.YEARS.sort() : []
+  state.current_year = availableYears.length ? availableYears[availableYears.length - 1] : state.current_year
   const nafs = state.config.SECTIONS_NAF
   for (code in nafs) {
     const label = nafs[code]
