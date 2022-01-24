@@ -30,6 +30,10 @@ async function init() {
   state.config = responseConfig.data
   const availableYears = state.config.YEARS && state.config.YEARS.length ? state.config.YEARS.sort() : []
   state.current_year = availableYears.length ? availableYears[availableYears.length - 1] : state.current_year
+
+  // Patch temporaire : 2021 en dur. En attendant d'avoir le champ PUBLIC_YEARS rendu par le endpoint /config.
+  state.current_year = 2021
+
   const nafs = state.config.SECTIONS_NAF
   for (code in nafs) {
     const label = nafs[code]
