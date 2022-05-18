@@ -1,4 +1,4 @@
-TL;DR: <span color="red">Ce dépôté est déprécié. Voir le repo egapro-next pour la partie consultation.</span>
+TL;DR: <span color="red">Ce dépôté est archivé. Voir le repo egapro-next pour la partie consultation.</span>
 
 # Site EgaPro de consultation
 
